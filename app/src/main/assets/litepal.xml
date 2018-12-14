@@ -1,0 +1,13 @@
+<litepal>
+
+    <dbname value="simple_weather" />
+
+    <version value="1" />
+
+    <list>
+        <mapping class="com.huris.simpleweather.db.Province" />
+        <mapping class="com.huris.simpleweather.db.City" />
+        <mapping class="com.huris.simpleweather.db.County" />
+    </list>
+
+</litepal>
