@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--将他们添加到activity_weather.xml中-->
+<!--首先最外层使用了一个FrameLayout,并将背景色设置为colorPrimary-->
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -22,6 +23,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <!--在FrameLayout中嵌套了一个ScrollView-->
+            <!--这是因为天气界面中的内容比较多
+                使用ScrollView可以允许我们通过滚动的方式查看屏幕以外的内容-->
             <ScrollView
                 android:id="@+id/weather_layout"
                 android:layout_width="match_parent"
@@ -29,6 +33,9 @@
                 android:scrollbars="none"
                 android:overScrollMode="never">
 
+                <!--由于ScrollView的内部只允许存在一个直接子布局,
+                    因此这里又嵌套了一个垂直方向的LinearLayou,
+                    然后在LinearLayout中将刚才定义的所有布局逐个引入-->
                 <LinearLayout
                     android:orientation="vertical"
                     android:layout_width="match_parent"
