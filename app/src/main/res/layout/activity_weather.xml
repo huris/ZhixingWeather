@@ -7,6 +7,11 @@
     android:layout_height="match_parent"
     android:background="@color/colorPrimary">
 
+    <!--在FrameLayout中添加一个ImageView,并将他的宽和高设置成match_parent,
+        由于FrameLayout默认情况下会将控件都放置在左上角,
+        因此ScrollView会完全覆盖住ImageView,
+        从而ImageView也就成为背景图片了
+        -->
     <ImageView
         android:id="@+id/bing_pic_img"
         android:layout_width="match_parent"
