@@ -61,7 +61,7 @@ public class WeatherActivity extends AppCompatActivity {
 
     private TextView sportText;
 
-//    private ImageView bingPicImg;
+    private ImageView bingPicImg;
 
 //    private String mWeatherId;
 
@@ -76,7 +76,8 @@ public class WeatherActivity extends AppCompatActivity {
 //        }
         setContentView(R.layout.activity_weather);
         // 初始化各控件,获取各控件的实例
-//        bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
+        // 获取新增控件ImageView的实例
+        bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
         weatherLayout = (ScrollView) findViewById(R.id.weather_layout);
         titleCity = (TextView) findViewById(R.id.title_city);
         titleUpdateTime = (TextView) findViewById(R.id.title_update_time);
@@ -124,12 +125,15 @@ public class WeatherActivity extends AppCompatActivity {
 //                drawerLayout.openDrawer(GravityCompat.START);
 //            }
 //        });
-//        String bingPic = prefs.getString("bing_pic", null);
-//        if (bingPic != null) {
-//            Glide.with(this).load(bingPic).into(bingPicImg);
-//        } else {
-//            loadBingPic();
-//        }
+        // 尝试从SharedPreferences中读取缓存背景图片
+        String bingPic = prefs.getString("bing_pic", null);
+        if (bingPic != null) {
+            // 如果有缓存的话直接使用Glide来加载这张图片
+            Glide.with(this).load(bingPic).into(bingPicImg);
+        } else {
+            // 没有的话就调用loadBingPic()方法去请求今日的必应背景图
+            loadBingPic();
+        }
     }
 
     /**
@@ -179,25 +183,29 @@ public class WeatherActivity extends AppCompatActivity {
                 });
             }
         });
-//        loadBingPic();
+        // 每次请求天气信息的时候也会刷新背景图片
+        loadBingPic();
     }
 
     /**
      * 加载必应每日一图
      */
-    /*
     private void loadBingPic() {
         String requestBingPic = "http://guolin.tech/api/bing_pic";
+        // 首先调用HttpUtil.sendOkHttpRequest()来获取必应背景图的链接
         HttpUtil.sendOkHttpRequest(requestBingPic, new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String bingPic = response.body().string();
+                // 之后将这个连接缓存到SharedPreferences当中
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
                 editor.putString("bing_pic", bingPic);
                 editor.apply();
+                // 将当前线程切换回主线程
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        // 使用Glide来加载这张图片就可以了
                         Glide.with(WeatherActivity.this).load(bingPic).into(bingPicImg);
                     }
                 });
@@ -208,7 +216,7 @@ public class WeatherActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
         });
-    }*/
+    }
 
     /**
      * 处理并展示Weather实体类中的数据。
