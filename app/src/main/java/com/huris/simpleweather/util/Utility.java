@@ -9,6 +9,7 @@ import com.google.gson.reflect.TypeToken;
 import com.huris.simpleweather.db.City;
 import com.huris.simpleweather.db.County;
 import com.huris.simpleweather.db.Province;
+import com.huris.simpleweather.gson.Weather;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,4 +87,23 @@ public class Utility {
         }
         return false;
     }
+
+    /**
+     * 将返回的JSON数据解析成Weather实体类
+     */
+    public static Weather handleWeatherResponse(String response) {
+        try {
+            // handleWeatherResponse()方法先通过JSONObject和JSONArray将天气数据中的主体内容解析出来
+            JSONObject jsonObject = new JSONObject(response);
+            JSONArray jsonArray = jsonObject.getJSONArray("HeWeather");
+            String weatherContent = jsonArray.getJSONObject(0).toString();
+            // 由于我们之前已经按照上面的数据格式定义过相应的GSON实体类,
+            // 因此只需要通过调用fromjson()方法就能直接将JSON数据转换成Weather对象了
+            return new Gson().fromJson(weatherContent, Weather.class);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }
