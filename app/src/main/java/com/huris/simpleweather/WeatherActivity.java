@@ -19,6 +19,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.LocationClient;
 import com.bumptech.glide.Glide;
 import com.huris.simpleweather.gson.Forecast;
 import com.huris.simpleweather.gson.Weather;
@@ -33,6 +34,10 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
+
+    public LocationClient mLocationClient;
+
+    private TextView positionText;
 
     public DrawerLayout drawerLayout;
 
@@ -126,12 +131,12 @@ public class WeatherActivity extends AppCompatActivity {
         // 调用一个setOnRefreshListener()方法设置一个下拉刷新的监听器
         // 当触发下拉刷新操作的时候,就会回调这个监听器的onRefresh()方法
         swipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // 此处我们调用requesWeather()方法请求天气信息就可以了
-                requestWeather(mWeatherId);
-            }
-        }
+                                              @Override
+                                              public void onRefresh() {
+                                                  // 此处我们调用requesWeather()方法请求天气信息就可以了
+                                                  requestWeather(mWeatherId);
+                                              }
+                                          }
         );
         // 在Button的点击事件中调用DrawerLayout的openDrawer()方法打开滑动菜单就可以了
         navButton.setOnClickListener(new View.OnClickListener() {
