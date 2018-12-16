@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.huris.simpleweather.gson.Forecast;
 import com.huris.simpleweather.gson.Weather;
+import com.huris.simpleweather.service.AutoUpdateService;
 import com.huris.simpleweather.util.HttpUtil;
 import com.huris.simpleweather.util.Utility;
 
@@ -274,8 +275,11 @@ public class WeatherActivity extends AppCompatActivity {
         sportText.setText(sport);
         // 设置完之后要将ScrollView设置为可见
         weatherLayout.setVisibility(View.VISIBLE);
-//        Intent intent = new Intent(this, AutoUpdateService.class);
-//        startService(intent);
+        // 在showWeatherInfo()方法的最后加入启动AutoUpdateService这个服务的代码
+        // 这样只要一旦选中了某个城市并成功更新天气之后,AutoUpdateService就会一直在后台运行
+        // 并保证10分钟更新一次天气
+        Intent intent = new Intent(this, AutoUpdateService.class);
+        startService(intent);
     }
 
 }
