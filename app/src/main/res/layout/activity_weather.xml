@@ -18,6 +18,9 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
 
+    <!--在SwipeRefreshLayout的外面又嵌套了一层DrawerLayout-->
+    <!--DrawerLayout中的第一个子控件用于作为主屏幕中显示的内容-->
+    <!--第二个子控件的位置添加了用于遍历省市县数据的碎片-->
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
