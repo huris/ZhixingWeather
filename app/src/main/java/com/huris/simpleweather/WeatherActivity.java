@@ -251,7 +251,10 @@ public class WeatherActivity extends AppCompatActivity {
         LocationClientOption option = new LocationClientOption();
         // 之后调用它的setScanSpan()方法来设置更新的间隔
         option.setScanSpan(1000); // 这里传入1000,表示1000ms进行一个更新
+        // 此处调用了LocationClientOption的setIsNeedAddress()方法,并传入true
+        // 表示我们需要获取当前位置详细的地址信息
         option.setIsNeedAddress(true);
+        option.setLocationMode(LocationClientOption.LocationMode.Device_Sensors);
         mLocationClient.setLocOption(option);
     }
 
@@ -265,6 +268,11 @@ public class WeatherActivity extends AppCompatActivity {
                     StringBuilder currentPosition = new StringBuilder();
                     currentPosition.append("纬度：").append(location.getLatitude()).append("\n");
                     currentPosition.append("经线：").append(location.getLongitude()).append("\n");
+                    currentPosition.append("国家：").append(location.getCountry()).append("\n");
+                    currentPosition.append("省：").append(location.getProvince()).append("\n");
+                    currentPosition.append("市：").append(location.getCity()).append("\n");
+                    currentPosition.append("区：").append(location.getDistrict()).append("\n");
+                    currentPosition.append("街道：").append(location.getStreet()).append("\n");
                     currentPosition.append("定位方式：");
                     if (location.getLocType() == BDLocation.TypeGpsLocation) {
                         currentPosition.append("GPS");
