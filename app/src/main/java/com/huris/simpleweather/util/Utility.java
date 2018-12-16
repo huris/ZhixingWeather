@@ -1,6 +1,7 @@
 package com.huris.simpleweather.util;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.ListView;
 
 import com.google.gson.Gson;

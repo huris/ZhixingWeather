@@ -1,11 +1,18 @@
 package com.huris.simpleweather.db;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.litepal.crud.DataSupport;
 
 public class Province extends DataSupport {
-    private int id;     //id是每个实体类中都应该有的字段
+
     private String provinceName;  //provinceName记录省的名字
+
     private int provinceCode;   //provinceCode记录省的代号
+
+    private int id;     //id是每个实体类中都应该有的字段
+
+
 
     public int getId() {
         return id;
