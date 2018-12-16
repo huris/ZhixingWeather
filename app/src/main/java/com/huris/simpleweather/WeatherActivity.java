@@ -33,13 +33,13 @@ import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
 
-//    public DrawerLayout drawerLayout;
+    public DrawerLayout drawerLayout;
 
     public SwipeRefreshLayout swipeRefresh;
 
     private ScrollView weatherLayout;
 
-//    private Button navButton;
+    private Button navButton;
 
     private TextView titleCity;
 
@@ -100,8 +100,9 @@ public class WeatherActivity extends AppCompatActivity {
         // 然后调用setColorSchemeResources()方法来设置下拉刷新进度条的颜色
         // 这里我们就使用colorPrimary作为进度条的颜色
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
-//        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-//        navButton = (Button) findViewById(R.id.nav_button);
+        // 首先获取到DrawerLayout和Button的实例
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        navButton = (Button) findViewById(R.id.nav_button);
 
         // 尝试从本地缓存中读取数据
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -131,12 +132,13 @@ public class WeatherActivity extends AppCompatActivity {
             }
         }
         );
-//        navButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                drawerLayout.openDrawer(GravityCompat.START);
-//            }
-//        });
+        // 在Button的点击事件中调用DrawerLayout的openDrawer()方法打开滑动菜单就可以了
+        navButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
         // 尝试从SharedPreferences中读取缓存背景图片
         String bingPic = prefs.getString("bing_pic", null);
         if (bingPic != null) {
