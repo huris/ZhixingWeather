@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--在这里嵌套了一层SwipeRefreshLayout,这样ScrollView就自动拥有下拉刷新功能了-->
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipe_refresh"
             android:layout_width="match_parent"
