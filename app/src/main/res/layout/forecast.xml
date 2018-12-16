@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="15dp"
-        android:text="预报"
+        android:text="未来三天预报"
         android:textColor="#fff"
         android:textSize="20sp"/>
 
