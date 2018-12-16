@@ -53,6 +53,8 @@
 
                     <include layout="@layout/title" />
 
+                    <include layout="@layout/location" />
+
                     <include layout="@layout/now" />
 
                     <include layout="@layout/forecast" />

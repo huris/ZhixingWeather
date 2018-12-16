@@ -19,6 +19,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.LocationClient;
 import com.bumptech.glide.Glide;
 import com.huris.simpleweather.gson.Forecast;
 import com.huris.simpleweather.gson.Weather;
@@ -33,6 +34,10 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
+
+    public LocationClient mLocationClient;
+
+    private TextView positionText;
 
     public DrawerLayout drawerLayout;
 
