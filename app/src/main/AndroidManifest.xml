@@ -4,17 +4,17 @@
     package="com.huris.simpleweather">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>-->
-    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>-->
-    <!--<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>-->
-    <!--<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>-->
-    <!--<uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>-->
-    <!--<uses-permission android:name="android.permission.READ_PHONE_STATE"/>-->
-    <!--<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>-->
-    <!--<uses-permission android:name="android.permission.INTERNET"/>-->
-    <!--<uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"-->
-        <!--tools:ignore="ProtectedPermissions" />-->
-    <!--<uses-permission android:name="android.permission.WAKE_LOCK"/>-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <application
         android:name="org.litepal.LitePalApplication"
@@ -24,9 +24,9 @@
         android:roundIcon="@mipmap/logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <!--<meta-data-->
-            <!--android:name="com.baidu.lbsapi.API_KEY"-->
-            <!--android:value="I30ziRw7xmMXagfb2hwebllHswn9fNuB" />-->
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="I30ziRw7xmMXagfb2hwebllHswn9fNuB" />
 
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -43,11 +43,11 @@
             android:exported="true">
         </service>
 
-        <!--<service-->
-            <!--android:name="com.baidu.location.f"-->
-            <!--android:enabled="true"-->
-            <!--android:process=":remote">-->
-        <!--</service>-->
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote">
+        </service>
 
     </application>
 

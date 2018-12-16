@@ -1,11 +1,15 @@
 package com.huris.simpleweather;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -19,7 +23,17 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.map.BaiduMap;
+import com.baidu.mapapi.map.MapStatusUpdate;
+import com.baidu.mapapi.map.MapStatusUpdateFactory;
+import com.baidu.mapapi.map.MapView;
+import com.baidu.mapapi.map.MyLocationData;
+import com.baidu.mapapi.model.LatLng;
 import com.bumptech.glide.Glide;
 import com.huris.simpleweather.gson.Forecast;
 import com.huris.simpleweather.gson.Weather;
@@ -28,12 +42,20 @@ import com.huris.simpleweather.util.HttpUtil;
 import com.huris.simpleweather.util.Utility;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
+
+    private MapView mapView;
+
+    private BaiduMap baiduMap;
+
+    private boolean isFirstLocate = true;
 
     public LocationClient mLocationClient;
 
@@ -88,6 +110,15 @@ public class WeatherActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_weather);
         // 初始化各控件,获取各控件的实例
+        // 首先创建一个LocationClient的实例
+        // LocationClient的构建函数接收一个Context参数,
+        // 这里调用getApplicationContext()方法来获取一个全局的Context参数并传入
+        mLocationClient = new LocationClient(getApplicationContext());
+        // 之后调用LocationClient的registerLocationListener()方法来注册一个定位监听器
+        // 当获取到位置信息的时候,就会回调这个定位监听器
+        mLocationClient.registerLocationListener(new MyLocationListener());
+        positionText = (TextView) findViewById(R.id.position_text_view);
+
         // 获取新增控件ImageView的实例
         bingPicImg = (ImageView) findViewById(R.id.bing_pic_img);
         weatherLayout = (ScrollView) findViewById(R.id.weather_layout);
@@ -109,6 +140,25 @@ public class WeatherActivity extends AppCompatActivity {
         // 首先获取到DrawerLayout和Button的实例
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navButton = (Button) findViewById(R.id.nav_button);
+
+        // 创建一个空的List集合,然后依次判断这3个权限有没有被授权,如果没有被授权就添加到List集合中
+        List<String> permissionList = new ArrayList<>();
+        if (ContextCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
+        }
+        if (ContextCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.READ_PHONE_STATE) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.READ_PHONE_STATE);
+        }
+        if (ContextCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            permissionList.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        }
+        if (!permissionList.isEmpty()) {
+            // 最后将List转换成数组,再调用ActivityCompat.requestPermissions()方法一次性申请
+            String[] permissions = permissionList.toArray(new String[permissionList.size()]);
+            ActivityCompat.requestPermissions(WeatherActivity.this, permissions, 1);
+        } else {
+            requestLocation();
+        }
 
         // 尝试从本地缓存中读取数据
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -155,6 +205,116 @@ public class WeatherActivity extends AppCompatActivity {
             loadBingPic();
         }
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch (requestCode) {
+            case 1:
+                if (grantResults.length > 0) {
+                    for (int result : grantResults) {
+                        // 通过一个循环将申请的每个权限都进行了判断
+                        if (result != PackageManager.PERMISSION_GRANTED) {
+                            Toast.makeText(this, "必须同意所有权限才能使用本程序", Toast.LENGTH_SHORT).show();
+                            // 如果有任何一个权限被拒绝,就直接调用finish()方法关闭当前程序
+                            finish();
+                            return;
+                        }
+                    }
+                    // 只有当所有权限都被用户同意了,才会调用requestLocation()方法开始地理位置定位
+                    requestLocation();
+                } else {
+                    Toast.makeText(this, "发生未知错误", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                break;
+            default:
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        // 最后要记得活动被销毁的时候一定要调用stop方法来停止定位,
+        // 不然程序会在后台不停地进行定位,从而严重消耗手机的电能
+        mLocationClient.stop();
+//        mapView.onDestroy();
+//        baiduMap.setMyLocationEnabled(false);
+    }
+
+    private void requestLocation() {
+        initLocation();
+        mLocationClient.start();
+    }
+
+    private void initLocation() {
+        // 在initLocation()方法中我们创建一个LocationClientOption对象
+        LocationClientOption option = new LocationClientOption();
+        // 之后调用它的setScanSpan()方法来设置更新的间隔
+        option.setScanSpan(1000); // 这里传入1000,表示1000ms进行一个更新
+        option.setIsNeedAddress(true);
+        mLocationClient.setLocOption(option);
+    }
+
+    public class MyLocationListener extends BDAbstractLocationListener {
+
+        @Override
+        public void onReceiveLocation(final BDLocation location) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    StringBuilder currentPosition = new StringBuilder();
+                    currentPosition.append("纬度：").append(location.getLatitude()).append("\n");
+                    currentPosition.append("经线：").append(location.getLongitude()).append("\n");
+                    currentPosition.append("定位方式：");
+                    if (location.getLocType() == BDLocation.TypeGpsLocation) {
+                        currentPosition.append("GPS");
+                    } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
+                        currentPosition.append("网络");
+                    }
+                    positionText.setText(currentPosition);
+                }
+            });
+//            StringBuilder currentPosition = new StringBuilder();
+//            currentPosition.append("纬度：").append(location.getLatitude()).append("\n");
+//            currentPosition.append("经线：").append(location.getLongitude()).append("\n");
+//            currentPosition.append("国家：").append(location.getCountry()).append("\n");
+//            currentPosition.append("省：").append(location.getProvince()).append("\n");
+//            currentPosition.append("市：").append(location.getCity()).append("\n");
+//            currentPosition.append("区：").append(location.getDistrict()).append("\n");
+//            currentPosition.append("街道：").append(location.getStreet()).append("\n");
+//            currentPosition.append("定位方式：");
+//            if (location.getLocType() == BDLocation.TypeGpsLocation) {
+//                currentPosition.append("GPS");
+//            } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
+//                currentPosition.append("网络");
+//            }
+//            positionText.setText(currentPosition);
+//            if (location.getLocType() == BDLocation.TypeGpsLocation
+//                    || location.getLocType() == BDLocation.TypeNetWorkLocation) {
+//                navigateTo(location);
+//            }
+        }
+
+    }
+
+    private void navigateTo(BDLocation location) {
+        if (isFirstLocate) {
+            Toast.makeText(this, "nav to " + location.getAddrStr(), Toast.LENGTH_SHORT).show();
+            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+            MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
+            baiduMap.animateMapStatus(update);
+            update = MapStatusUpdateFactory.zoomTo(16f);
+            baiduMap.animateMapStatus(update);
+            isFirstLocate = false;
+        }
+        MyLocationData.Builder locationBuilder = new MyLocationData.
+                Builder();
+        locationBuilder.latitude(location.getLatitude());
+        locationBuilder.longitude(location.getLongitude());
+        MyLocationData locationData = locationBuilder.build();
+        baiduMap.setMyLocationData(locationData);
+    }
+
 
     /**
      * 根据天气id请求城市天气信息。
