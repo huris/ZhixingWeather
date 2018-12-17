@@ -138,7 +138,7 @@ public class WeatherActivity extends AppCompatActivity {
         // 首先获取到DrawerLayout和Button的实例
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navButton = (Button) findViewById(R.id.nav_button);
-        mapPosition = (Button) findViewById(R.id.map_position);
+        mapPosition = (Button)findViewById(R.id.map_position);
 
         // 当按钮被按下时,切换到地图视图
         mapPosition.setOnClickListener(new View.OnClickListener() {
@@ -442,12 +442,8 @@ public class WeatherActivity extends AppCompatActivity {
             TextView minText = (TextView) view.findViewById(R.id.min_text);
             dateText.setText(forecast.date);
             infoText.setText(forecast.more.info);
-            StringBuilder maxTemperature = new StringBuilder("最高: ");
-            maxTemperature.append(forecast.temperature.max + "℃");
-            StringBuilder minTemperature = new StringBuilder("最低: ");
-            minTemperature.append(forecast.temperature.min + "℃");
-            maxText.setText(maxTemperature);
-            minText.setText(minTemperature);
+            maxText.setText(forecast.temperature.max);
+            minText.setText(forecast.temperature.min);
             forecastLayout.addView(view);
         }
         if (weather.aqi != null) {
