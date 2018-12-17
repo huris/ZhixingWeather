@@ -404,8 +404,9 @@ public class WeatherActivity extends AppCompatActivity {
      */
     private void showWeatherInfo(Weather weather) {
         String cityName = weather.basic.cityName;
-        StringBuilder updateTime = new StringBuilder("上次更新时间: ");
+        StringBuilder updateTime = new StringBuilder();
         updateTime.append(weather.basic.update.updateTime.split(" ")[1]);
+        updateTime.append("刷新");
         String degree = weather.now.temperature + "℃";
         String weatherInfo = weather.now.more.info;
         titleCity.setText(cityName);
