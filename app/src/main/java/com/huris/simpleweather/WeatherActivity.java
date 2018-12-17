@@ -442,8 +442,14 @@ public class WeatherActivity extends AppCompatActivity {
             TextView minText = (TextView) view.findViewById(R.id.min_text);
             dateText.setText(forecast.date);
             infoText.setText(forecast.more.info);
-            maxText.setText(forecast.temperature.max);
-            minText.setText(forecast.temperature.min);
+            StringBuilder maxTemperature = new StringBuilder("最高: ");
+            maxTemperature.append(forecast.temperature.max);
+            maxTemperature.append("℃");
+            StringBuilder minTemperature = new StringBuilder("最低: ");
+            minTemperature.append(forecast.temperature.min);
+            minTemperature.append("℃");
+            maxText.setText(maxTemperature);
+            minText.setText(minTemperature);
             forecastLayout.addView(view);
         }
         if (weather.aqi != null) {
