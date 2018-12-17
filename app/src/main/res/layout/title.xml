@@ -23,15 +23,4 @@
         android:textColor="#fff"
         android:textSize="20sp" />
 
-    <!--居右显示更新时间-->
-    <TextView
-        android:id="@+id/title_update_time"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:textColor="#fff"
-        android:textSize="16sp"/>
-
 </RelativeLayout>

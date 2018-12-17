@@ -6,6 +6,15 @@
     android:layout_height="wrap_content"
     android:layout_margin="15dp">
 
+    <!--居右显示更新时间-->
+    <TextView
+        android:id="@+id/title_update_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:textColor="#fff"
+        android:textSize="16sp"/>
+
     <!--显示当前的气温-->
     <TextView
         android:id="@+id/degree_text"
