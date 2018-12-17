@@ -59,6 +59,8 @@
 
                     <include layout="@layout/aqi" />
 
+                    <include layout="@layout/other" />
+
                     <include layout="@layout/forecast" />
 
                     <include layout="@layout/suggestion" />
