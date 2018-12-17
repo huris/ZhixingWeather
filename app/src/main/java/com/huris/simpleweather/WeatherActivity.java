@@ -57,8 +57,6 @@ public class WeatherActivity extends AppCompatActivity {
 
     private TextView precipitationText;
 
-    private boolean isFirstLocate = true;
-
     private Button mapPosition;
 
     public LocationClient mLocationClient;
@@ -311,46 +309,9 @@ public class WeatherActivity extends AppCompatActivity {
                     positionText.setText(currentPosition);
                 }
             });
-//            StringBuilder currentPosition = new StringBuilder();
-//            currentPosition.append("纬度：").append(location.getLatitude()).append("\n");
-//            currentPosition.append("经线：").append(location.getLongitude()).append("\n");
-//            currentPosition.append("国家：").append(location.getCountry()).append("\n");
-//            currentPosition.append("省：").append(location.getProvince()).append("\n");
-//            currentPosition.append("市：").append(location.getCity()).append("\n");
-//            currentPosition.append("区：").append(location.getDistrict()).append("\n");
-//            currentPosition.append("街道：").append(location.getStreet()).append("\n");
-//            currentPosition.append("定位方式：");
-//            if (location.getLocType() == BDLocation.TypeGpsLocation) {
-//                currentPosition.append("GPS");
-//            } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
-//                currentPosition.append("网络");
-//            }
-//            positionText.setText(currentPosition);
-//            if (location.getLocType() == BDLocation.TypeGpsLocation
-//                    || location.getLocType() == BDLocation.TypeNetWorkLocation) {
-//                navigateTo(location);
-//            }
         }
 
     }
-
-//    private void navigateTo(BDLocation location) {
-//        if (isFirstLocate) {
-//            Toast.makeText(this, "nav to " + location.getAddrStr(), Toast.LENGTH_SHORT).show();
-//            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-//            MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
-//            baiduMap.animateMapStatus(update);
-//            update = MapStatusUpdateFactory.zoomTo(16f);
-//            baiduMap.animateMapStatus(update);
-//            isFirstLocate = false;
-//        }
-//        MyLocationData.Builder locationBuilder = new MyLocationData.
-//                Builder();
-//        locationBuilder.latitude(location.getLatitude());
-//        locationBuilder.longitude(location.getLongitude());
-//        MyLocationData locationData = locationBuilder.build();
-//        baiduMap.setMyLocationData(locationData);
-//    }
 
 
     /**
