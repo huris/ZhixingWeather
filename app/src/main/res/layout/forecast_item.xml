@@ -26,6 +26,15 @@
         android:gravity="center"
         android:textColor="#fff"/>
 
+    <ImageView
+        android:id="@+id/weather_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:src="@drawable/ic_qing"
+        android:gravity="center"
+        />
+
     <!--显示当天的最低气温-->
     <TextView
         android:id="@+id/min_text"
