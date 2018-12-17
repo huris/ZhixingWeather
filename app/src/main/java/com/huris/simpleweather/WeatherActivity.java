@@ -51,11 +51,9 @@ import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
 
-    private MapView mapView;
-
-    private BaiduMap baiduMap;
-
     private boolean isFirstLocate = true;
+
+    private Button mapPosition;
 
     public LocationClient mLocationClient;
 
@@ -140,6 +138,17 @@ public class WeatherActivity extends AppCompatActivity {
         // 首先获取到DrawerLayout和Button的实例
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navButton = (Button) findViewById(R.id.nav_button);
+        mapPosition = (Button)findViewById(R.id.map_position);
+
+        // 当按钮被按下时,切换到地图视图
+        mapPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WeatherActivity.this, MapActivity.class);
+                startActivity(intent);
+//                Toast.makeText(WeatherActivity.this, "hello", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // 创建一个空的List集合,然后依次判断这3个权限有没有被授权,如果没有被授权就添加到List集合中
         List<String> permissionList = new ArrayList<>();
@@ -266,9 +275,9 @@ public class WeatherActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     StringBuilder currentPosition = new StringBuilder();
+                    currentPosition.append("位置：").append(location.getAddrStr()).append("\n");
                     currentPosition.append("经度：").append(location.getLongitude()).append("   ");
                     currentPosition.append("纬度：").append(location.getLatitude()).append("\n");
-                    currentPosition.append("地址：").append(location.getAddrStr()).append("\n");
 //                    currentPosition.append("国家：").append(location.getCountry()).append("   ");
 //                    currentPosition.append("省份：").append(location.getProvince()).append("\n");
 //                    currentPosition.append("市：").append(location.getCity()).append("   ");
@@ -306,23 +315,23 @@ public class WeatherActivity extends AppCompatActivity {
 
     }
 
-    private void navigateTo(BDLocation location) {
-        if (isFirstLocate) {
-            Toast.makeText(this, "nav to " + location.getAddrStr(), Toast.LENGTH_SHORT).show();
-            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
-            MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
-            baiduMap.animateMapStatus(update);
-            update = MapStatusUpdateFactory.zoomTo(16f);
-            baiduMap.animateMapStatus(update);
-            isFirstLocate = false;
-        }
-        MyLocationData.Builder locationBuilder = new MyLocationData.
-                Builder();
-        locationBuilder.latitude(location.getLatitude());
-        locationBuilder.longitude(location.getLongitude());
-        MyLocationData locationData = locationBuilder.build();
-        baiduMap.setMyLocationData(locationData);
-    }
+//    private void navigateTo(BDLocation location) {
+//        if (isFirstLocate) {
+//            Toast.makeText(this, "nav to " + location.getAddrStr(), Toast.LENGTH_SHORT).show();
+//            LatLng ll = new LatLng(location.getLatitude(), location.getLongitude());
+//            MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
+//            baiduMap.animateMapStatus(update);
+//            update = MapStatusUpdateFactory.zoomTo(16f);
+//            baiduMap.animateMapStatus(update);
+//            isFirstLocate = false;
+//        }
+//        MyLocationData.Builder locationBuilder = new MyLocationData.
+//                Builder();
+//        locationBuilder.latitude(location.getLatitude());
+//        locationBuilder.longitude(location.getLongitude());
+//        MyLocationData locationData = locationBuilder.build();
+//        baiduMap.setMyLocationData(locationData);
+//    }
 
 
     /**
