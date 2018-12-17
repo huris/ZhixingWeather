@@ -51,6 +51,11 @@ import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
 
+    private TextView windSpeedText;
+
+    private TextView visibilityText;
+
+    private TextView precipitationText;
 
     private boolean isFirstLocate = true;
 
@@ -128,12 +133,22 @@ public class WeatherActivity extends AppCompatActivity {
         degreeText = (TextView) findViewById(R.id.degree_text);
         weatherInfoText = (TextView) findViewById(R.id.weather_info_text);
         forecastLayout = (LinearLayout) findViewById(R.id.forecast_layout);
+
+        // 实况天气
+        windSpeedText = (TextView) findViewById(R.id.windSpeed_text);
+        visibilityText = (TextView) findViewById(R.id.vis_text);
+        precipitationText = (TextView) findViewById(R.id.precipitation_text);
+
+        // 空气质量
         aqiText = (TextView) findViewById(R.id.aqi_text);
         pm25Text = (TextView) findViewById(R.id.pm25_text);
         qualityText = (TextView) findViewById(R.id.quality_text);
+
+        // 生活建议
         comfortText = (TextView) findViewById(R.id.comfort_text);
         carWashText = (TextView) findViewById(R.id.car_wash_text);
         sportText = (TextView) findViewById(R.id.sport_text);
+
         // 首先需要在onCreat()方法中获取到了SwipeRefreshLayout的实例
         swipeRefresh = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh);
         // 然后调用setColorSchemeResources()方法来设置下拉刷新进度条的颜色
@@ -142,7 +157,7 @@ public class WeatherActivity extends AppCompatActivity {
         // 首先获取到DrawerLayout和Button的实例
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         navButton = (Button) findViewById(R.id.nav_button);
-        mapPosition = (Button)findViewById(R.id.map_position);
+        mapPosition = (Button) findViewById(R.id.map_position);
 
         // 当按钮被按下时,切换到地图视图
         mapPosition.setOnClickListener(new View.OnClickListener() {
@@ -460,6 +475,11 @@ public class WeatherActivity extends AppCompatActivity {
             aqiText.setText(weather.aqi.city.aqi);
             pm25Text.setText(weather.aqi.city.pm25);
             qualityText.setText(weather.aqi.city.qlty);
+        }
+        if (weather.now != null) {
+            windSpeedText.setText(weather.now.windSpeed);
+            visibilityText.setText(weather.now.visibility);
+            precipitationText.setText(weather.now.precipitation);
         }
         String comfort = "舒适度：" + weather.suggestion.comfort.info;
         String carWash = "洗车指数：" + weather.suggestion.carWash.info;
