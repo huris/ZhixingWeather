@@ -18,6 +18,8 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -372,6 +374,25 @@ public class WeatherActivity extends AppCompatActivity {
         loadBingPic();
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.add_city:
+                Toast.makeText(this, "add", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.local_city:
+                Toast.makeText(this, "local", Toast.LENGTH_SHORT).show();
+                break;
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return true;
+    }
+
     /**
      * 加载必应每日一图
      */
@@ -382,6 +403,8 @@ public class WeatherActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 final String bingPic = response.body().string();
+//                Toast.makeText(WeatherActivity.this,bingPic, Toast.LENGTH_SHORT).show();
+//                final String bingPic = "https://source.unsplash.com/random";
                 // 之后将这个连接缓存到SharedPreferences当中
                 SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(WeatherActivity.this).edit();
                 editor.putString("bing_pic", bingPic);
