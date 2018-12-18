@@ -1,9 +1,12 @@
 package com.huris.simpleweather;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -42,6 +45,7 @@ import com.huris.simpleweather.util.HttpUtil;
 import com.huris.simpleweather.util.Utility;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -112,6 +116,7 @@ public class WeatherActivity extends AppCompatActivity {
             // 调用setStatusBarColor()方法将状态栏设置成透明色
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
+
         setContentView(R.layout.activity_weather);
         // 初始化各控件,获取各控件的实例
         // 首先创建一个LocationClient的实例
@@ -422,8 +427,31 @@ public class WeatherActivity extends AppCompatActivity {
             TextView infoText = (TextView) view.findViewById(R.id.info_text);
             TextView maxText = (TextView) view.findViewById(R.id.max_text);
             TextView minText = (TextView) view.findViewById(R.id.min_text);
+            ImageView weatherImage = (ImageView) view.findViewById(R.id.weather_view);
             dateText.setText(forecast.date);
             infoText.setText(forecast.more.info);
+            if (forecast.more.info.equals("晴")) { weatherImage.setImageResource(R.drawable.ic_qing); }
+            else if (forecast.more.info.equals("多云")) { weatherImage.setImageResource(R.drawable.ic_duoyun); }
+            else if (forecast.more.info.equals("少云")) { weatherImage.setImageResource(R.drawable.ic_shaoyun); }
+            else if (forecast.more.info.equals("晴间多云")) { weatherImage.setImageResource(R.drawable.ic_qingjianduoyun); }
+            else if (forecast.more.info.equals("阴")) { weatherImage.setImageResource(R.drawable.ic_yin); }
+            else if (forecast.more.info.equals("阵雨")) { weatherImage.setImageResource(R.drawable.ic_zhenyu); }
+            else if (forecast.more.info.equals("强阵雨")) { weatherImage.setImageResource(R.drawable.ic_qiangzhenyu); }
+            else if (forecast.more.info.equals("雷阵雨")) { weatherImage.setImageResource(R.drawable.ic_leizhenyu); }
+            else if (forecast.more.info.equals("强雷阵雨")) { weatherImage.setImageResource(R.drawable.ic_qiangleizhenyu); }
+            else if (forecast.more.info.equals("小雨")) { weatherImage.setImageResource(R.drawable.ic_xiaoyu); }
+            else if (forecast.more.info.equals("中雨")) { weatherImage.setImageResource(R.drawable.ic_zhongyu); }
+            else if (forecast.more.info.equals("大雨")) { weatherImage.setImageResource(R.drawable.ic_dayu); }
+            else if (forecast.more.info.equals("暴雨")) { weatherImage.setImageResource(R.drawable.ic_baoyu); }
+            else if (forecast.more.info.equals("大暴雨")) { weatherImage.setImageResource(R.drawable.ic_dabaoyu); }
+            else if (forecast.more.info.equals("特大暴雨")) { weatherImage.setImageResource(R.drawable.ic_tedabaoyu); }
+            else if (forecast.more.info.equals("小雪")) { weatherImage.setImageResource(R.drawable.ic_xiaoxue); }
+            else if (forecast.more.info.equals("中雪")) { weatherImage.setImageResource(R.drawable.ic_zhongxue); }
+            else if (forecast.more.info.equals("大雪")) { weatherImage.setImageResource(R.drawable.ic_daxue); }
+            else if (forecast.more.info.equals("暴雪")) { weatherImage.setImageResource(R.drawable.ic_baoxue); }
+            else  { weatherImage.setImageResource(R.drawable.ic_weizhi); }
+
+
             StringBuilder maxTemperature = new StringBuilder("最高: ");
             maxTemperature.append(forecast.temperature.max);
             maxTemperature.append("℃");
