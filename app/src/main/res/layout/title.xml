@@ -23,6 +23,7 @@
         android:textColor="#fff"
         android:textSize="20sp" />
 
+
     <!--添加一个Button作为菜单按钮,并且让它居右显示-->
     <Button
         android:id="@+id/menu_button"

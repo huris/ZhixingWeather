@@ -57,6 +57,8 @@ import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
 
+    private  Menu menu;
+
     private TextView windSpeedText;
 
     private TextView visibilityText;
@@ -121,6 +123,10 @@ public class WeatherActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_weather);
         // 初始化各控件,获取各控件的实例
+
+        // 菜单
+//        menu = (Menu) findViewById(R.menu.menu);
+
         // 首先创建一个LocationClient的实例
         // LocationClient的构建函数接收一个Context参数,
         // 这里调用getApplicationContext()方法来获取一个全局的Context参数并传入
@@ -389,7 +395,7 @@ public class WeatherActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
