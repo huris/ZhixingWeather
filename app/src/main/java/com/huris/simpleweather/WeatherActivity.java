@@ -58,8 +58,6 @@ import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
 
-    private String cityName;
-
     private TextView windSpeedText;
 
     private TextView visibilityText;
@@ -168,8 +166,15 @@ public class WeatherActivity extends AppCompatActivity {
         swipeRefresh.setColorSchemeResources(R.color.colorPrimary);
         // 首先获取到DrawerLayout和Button的实例
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        navButton = (Button) findViewById(R.id.nav_button);
+//        navButton = (Button) findViewById(R.id.nav_button);
         mapPosition = (Button) findViewById(R.id.map_position);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.logo);
 
         // 当按钮被按下时,切换到地图视图
         mapPosition.setOnClickListener(new View.OnClickListener() {
@@ -208,6 +213,7 @@ public class WeatherActivity extends AppCompatActivity {
             Weather weather = Utility.handleWeatherResponse(weatherString);
             mWeatherId = weather.basic.weatherId;
             showWeatherInfo(weather);
+
         } else {
             // 第一次肯定是没有缓存的,因此就会从Intent中取出天气id,并调用requestWeather()方法从服务器中请求天气数据
             // 无缓存时去服务器查询天气
@@ -216,7 +222,6 @@ public class WeatherActivity extends AppCompatActivity {
 //            String weatherId = getIntent().getStringExtra("weather_id");
             weatherLayout.setVisibility(View.INVISIBLE);
             requestWeather(mWeatherId);
-//            requestWeather(weatherId);
         }
         // 调用一个setOnRefreshListener()方法设置一个下拉刷新的监听器
         // 当触发下拉刷新操作的时候,就会回调这个监听器的onRefresh()方法
@@ -229,12 +234,12 @@ public class WeatherActivity extends AppCompatActivity {
                                           }
         );
         // 在Button的点击事件中调用DrawerLayout的openDrawer()方法打开滑动菜单就可以了
-        navButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
-        });
+//        navButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                drawerLayout.openDrawer(GravityCompat.START);
+//            }
+//        });
         // 尝试从SharedPreferences中读取缓存背景图片
         String bingPic = prefs.getString("bing_pic", null);
         if (bingPic != null) {
@@ -244,13 +249,6 @@ public class WeatherActivity extends AppCompatActivity {
             // 没有的话就调用loadBingPic()方法去请求今日的必应背景图
             loadBingPic();
         }
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayUseLogoEnabled(true);
-        getSupportActionBar().setLogo(R.mipmap.logo);
-        getSupportActionBar().setTitle(cityName);
     }
 
     @Override
@@ -313,6 +311,9 @@ public class WeatherActivity extends AppCompatActivity {
                 @Override
                 public void run() {
                     StringBuilder currentPosition = new StringBuilder();
+//                    addressName = new StringBuilder();
+//                    addressName.append(location.getDistrict()).append(location.getStreet());
+//                    getSupportActionBar().setSubtitle(addressName);
                     currentPosition.append("位置：").append(location.getAddrStr()).append("\n");
                     currentPosition.append("经度：").append(location.getLongitude()).append("   ");
                     currentPosition.append("纬度：").append(location.getLatitude()).append("\n");
@@ -445,13 +446,14 @@ public class WeatherActivity extends AppCompatActivity {
      * 从Weather对象中获取数据,然后显示在相应的控件上
      */
     private void showWeatherInfo(Weather weather) {
-        cityName = weather.basic.cityName;
+        String cityName = weather.basic.cityName;
+        getSupportActionBar().setTitle(cityName);
         StringBuilder updateTime = new StringBuilder();
         updateTime.append(weather.basic.update.updateTime.split(" ")[1]);
         updateTime.append("刷新");
         String degree = weather.now.temperature + "℃";
         String weatherInfo = weather.now.more.info;
-        titleCity.setText(cityName);
+//        titleCity.setText(cityName);
         titleUpdateTime.setText(updateTime);
         degreeText.setText(degree);
         weatherInfoText.setText(weatherInfo);
