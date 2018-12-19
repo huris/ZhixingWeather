@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--将他们添加到activity_weather.xml中-->
 <!--首先最外层使用了一个FrameLayout,并将背景色设置为colorPrimary-->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/colorPrimary">
 
     <!--在FrameLayout中添加一个ImageView,并将他的宽和高设置成match_parent,
@@ -17,6 +17,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="10dp"
+        android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <!--在SwipeRefreshLayout的外面又嵌套了一层DrawerLayout-->
     <!--DrawerLayout中的第一个子控件用于作为主屏幕中显示的内容-->

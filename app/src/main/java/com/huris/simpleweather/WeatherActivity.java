@@ -58,6 +58,7 @@ import okhttp3.Response;
 
 public class WeatherActivity extends AppCompatActivity {
 
+    private String cityName;
 
     private TextView windSpeedText;
 
@@ -109,17 +110,17 @@ public class WeatherActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (Build.VERSION.SDK_INT >= 21) {
-            // 调用getWindow().getDecorView()方法拿到当前活动的DecorView
-            View decorView = getWindow().getDecorView();
-            // 再调用它的setSystemUiVisibility()方法来改变系统UI的显示
-            // View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN和
-            // View.SYSTEM_UI_FLAG_LAYOUT_STABLE表示活动的布局会显示在状态栏上面
-            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            // 调用setStatusBarColor()方法将状态栏设置成透明色
-            getWindow().setStatusBarColor(Color.TRANSPARENT);
-        }
+//        if (Build.VERSION.SDK_INT >= 21) {
+//            // 调用getWindow().getDecorView()方法拿到当前活动的DecorView
+//            View decorView = getWindow().getDecorView();
+//            // 再调用它的setSystemUiVisibility()方法来改变系统UI的显示
+//            // View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN和
+//            // View.SYSTEM_UI_FLAG_LAYOUT_STABLE表示活动的布局会显示在状态栏上面
+//            decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+//            // 调用setStatusBarColor()方法将状态栏设置成透明色
+//            getWindow().setStatusBarColor(Color.TRANSPARENT);
+//        }
 
         setContentView(R.layout.activity_weather);
         // 初始化各控件,获取各控件的实例
@@ -243,8 +244,13 @@ public class WeatherActivity extends AppCompatActivity {
             // 没有的话就调用loadBingPic()方法去请求今日的必应背景图
             loadBingPic();
         }
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setLogo(R.mipmap.logo);
+        getSupportActionBar().setTitle(cityName);
     }
 
     @Override
@@ -439,7 +445,7 @@ public class WeatherActivity extends AppCompatActivity {
      * 从Weather对象中获取数据,然后显示在相应的控件上
      */
     private void showWeatherInfo(Weather weather) {
-        String cityName = weather.basic.cityName;
+        cityName = weather.basic.cityName;
         StringBuilder updateTime = new StringBuilder();
         updateTime.append(weather.basic.update.updateTime.split(" ")[1]);
         updateTime.append("刷新");
