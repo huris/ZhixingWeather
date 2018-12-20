@@ -176,9 +176,9 @@ public class WeatherActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(true);
-//        getSupportActionBar().setDisplayShowHomeEnabled(true);
-//        getSupportActionBar().setDisplayUseLogoEnabled(true);
-//        getSupportActionBar().setLogo(R.mipmap.logo);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        getSupportActionBar().setDisplayUseLogoEnabled(true);
+        getSupportActionBar().setLogo(R.drawable.local);
 
         // 当按钮被按下时,切换到地图视图
         mapPosition.setOnClickListener(new View.OnClickListener() {
@@ -529,7 +529,25 @@ public class WeatherActivity extends AppCompatActivity {
         if (weather.aqi != null) {
             aqiText.setText(weather.aqi.city.aqi);
             pm25Text.setText(weather.aqi.city.pm25);
-            qualityText.setText(weather.aqi.city.qlty);
+            // 当天气状况的子数多于一个的时候,为了能够保持界面美观
+            // 需要重新设置字体的大小
+            if(weather.aqi.city.qlty.length()>1)
+            {
+                // 将字体的大小设置为23,该参数通过调参解决
+                qualityText.setTextSize((float) 23);
+                StringBuilder tmp = new StringBuilder();
+                tmp.append(" ");  // 添加一个空格刚好实现居中
+                tmp.append(weather.aqi.city.qlty.charAt(0)).
+                        append(weather.aqi.city.qlty.charAt(1)).append("\n");
+                tmp.append(" ");
+                tmp.append(weather.aqi.city.qlty.charAt(2)).
+                        append(weather.aqi.city.qlty.charAt(3));
+                qualityText.setText(tmp);
+
+            }else {
+                // 否则就显示原来的字体大小
+                qualityText.setText(weather.aqi.city.qlty);
+            }
         }
         if (weather.now != null) {
             windSpeedText.setText(weather.now.windSpeed);
