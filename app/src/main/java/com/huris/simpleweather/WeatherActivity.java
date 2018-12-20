@@ -58,6 +58,9 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
+import static com.huris.simpleweather.util.TimeUtil.getWeekOfDate;
+import static com.huris.simpleweather.util.TimeUtil.stringToDate;
+
 public class WeatherActivity extends AppCompatActivity {
 
     private TextView windSpeedText;
@@ -472,7 +475,8 @@ public class WeatherActivity extends AppCompatActivity {
             TextView maxText = (TextView) view.findViewById(R.id.max_text);
             TextView minText = (TextView) view.findViewById(R.id.min_text);
             ImageView weatherImage = (ImageView) view.findViewById(R.id.weather_view);
-            dateText.setText(forecast.date);
+
+            dateText.setText(getWeekOfDate(stringToDate(forecast.date,"yyyy-MM-dd")));
             infoText.setText(forecast.more.info);
             if (forecast.more.info.equals("晴")) {
                 weatherImage.setImageResource(R.drawable.ic_qing);
