@@ -16,7 +16,8 @@
         android:layout_marginTop="15dp"
         android:text="实况天气"
         android:textColor="#fff"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
     <!--使用LinearLayout和RelativeLayout嵌套的方式实现了一个左右平分并且居中对齐的布局-->
     <LinearLayout

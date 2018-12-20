@@ -16,7 +16,8 @@
         android:layout_marginTop="15dp"
         android:text="未来三天预报"
         android:textColor="#fff"
-        android:textSize="20sp"/>
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
     <!--定义一个显示未来几天天气信息的布局-->
     <!--这个布局中并没有放入任何内容,因此这需要根据服务器返回的数据在代码中动态添加-->

@@ -19,6 +19,26 @@ public class Basic {
     public String weatherId;
 
     /**
+     * 国家id
+     */
+    @SerializedName("cnty")
+    public String countryId;
+
+    /**
+     * 省id
+     */
+    @SerializedName("admin_area")
+    public String provinceId;
+
+
+    /**
+     * 城市id
+     */
+    @SerializedName("parent_city")
+    public String cityId;
+
+
+    /**
      * 更新时间
      */
     public Update update;
