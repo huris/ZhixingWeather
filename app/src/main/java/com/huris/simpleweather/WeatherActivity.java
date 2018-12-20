@@ -467,6 +467,8 @@ public class WeatherActivity extends AppCompatActivity {
         weatherInfoText.setText(weatherInfo);
         forecastLayout.removeAllViews();
         // 在未来几天的天气预报的部分使用一个for循环来处理每天的天气信息
+        int i = 0;
+        String day = "";
         for (Forecast forecast : weather.forecastList) {
             // 循环中动态加载forecast_item.xml布局并进行设置相应的数据,然后添加到父布局当中
             View view = LayoutInflater.from(this).inflate(R.layout.forecast_item, forecastLayout, false);
@@ -475,8 +477,16 @@ public class WeatherActivity extends AppCompatActivity {
             TextView maxText = (TextView) view.findViewById(R.id.max_text);
             TextView minText = (TextView) view.findViewById(R.id.min_text);
             ImageView weatherImage = (ImageView) view.findViewById(R.id.weather_view);
+            if (i == 0) day = "今天";
+            else if (i == 1) day = "明天";
+            else if (i == 2) day = "后天";
+            i++;
+            // 写好准确日期
+            int MONTH = (forecast.date.charAt(5)-'0')*10+(forecast.date.charAt(6)-'0');
+            int DAY = (forecast.date.charAt(8)-'0')*10+(forecast.date.charAt(9)-'0');
 
-            dateText.setText(getWeekOfDate(stringToDate(forecast.date,"yyyy-MM-dd")));
+            dateText.setText(String.format("%02d.%02d/", MONTH,DAY)+
+                    getWeekOfDate(stringToDate(forecast.date, "yyyy-MM-dd"))+"/"+day);
             infoText.setText(forecast.more.info);
             if (forecast.more.info.equals("晴")) {
                 weatherImage.setImageResource(R.drawable.ic_qing);
@@ -521,11 +531,11 @@ public class WeatherActivity extends AppCompatActivity {
             }
 
             StringBuilder minTemperature = new StringBuilder("最低: ");
-            minTemperature.append("<font color='#00ccff'><big>"+forecast.temperature.min+"</big></font>");
+            minTemperature.append("<font color='#00ccff'><big>" + forecast.temperature.min + "</big></font>");
             minTemperature.append("℃");
 
             StringBuilder maxTemperature = new StringBuilder("最高: ");
-            maxTemperature.append("<font color='#FF4500'><big>"+forecast.temperature.max+"</big></font>");
+            maxTemperature.append("<font color='#FF4500'><big>" + forecast.temperature.max + "</big></font>");
             maxTemperature.append("℃");
 
             maxText.setText(Html.fromHtml(String.valueOf(maxTemperature)));
@@ -537,8 +547,7 @@ public class WeatherActivity extends AppCompatActivity {
             pm25Text.setText(weather.aqi.city.pm25);
             // 当天气状况的子数多于一个的时候,为了能够保持界面美观
             // 需要重新设置字体的大小
-            if(weather.aqi.city.qlty.length()>1)
-            {
+            if (weather.aqi.city.qlty.length() > 1) {
                 // 将字体的大小设置为23,该参数通过调参解决
                 qualityText.setTextSize((float) 22);
                 StringBuilder tmp = new StringBuilder();
@@ -550,7 +559,7 @@ public class WeatherActivity extends AppCompatActivity {
                         append(weather.aqi.city.qlty.charAt(3));
                 qualityText.setText(tmp);
 
-            }else {
+            } else {
                 // 否则就显示原来的字体大小
                 qualityText.setText(weather.aqi.city.qlty);
             }
