@@ -473,26 +473,47 @@ public class WeatherActivity extends AppCompatActivity {
             ImageView weatherImage = (ImageView) view.findViewById(R.id.weather_view);
             dateText.setText(forecast.date);
             infoText.setText(forecast.more.info);
-            if (forecast.more.info.equals("晴")) { weatherImage.setImageResource(R.drawable.ic_qing); }
-            else if (forecast.more.info.equals("多云")) { weatherImage.setImageResource(R.drawable.ic_duoyun); }
-            else if (forecast.more.info.equals("少云")) { weatherImage.setImageResource(R.drawable.ic_shaoyun); }
-            else if (forecast.more.info.equals("晴间多云")) { weatherImage.setImageResource(R.drawable.ic_qingjianduoyun); }
-            else if (forecast.more.info.equals("阴")) { weatherImage.setImageResource(R.drawable.ic_yin); }
-            else if (forecast.more.info.equals("阵雨")) { weatherImage.setImageResource(R.drawable.ic_zhenyu); }
-            else if (forecast.more.info.equals("强阵雨")) { weatherImage.setImageResource(R.drawable.ic_qiangzhenyu); }
-            else if (forecast.more.info.equals("雷阵雨")) { weatherImage.setImageResource(R.drawable.ic_leizhenyu); }
-            else if (forecast.more.info.equals("强雷阵雨")) { weatherImage.setImageResource(R.drawable.ic_qiangleizhenyu); }
-            else if (forecast.more.info.equals("小雨")) { weatherImage.setImageResource(R.drawable.ic_xiaoyu); }
-            else if (forecast.more.info.equals("中雨")) { weatherImage.setImageResource(R.drawable.ic_zhongyu); }
-            else if (forecast.more.info.equals("大雨")) { weatherImage.setImageResource(R.drawable.ic_dayu); }
-            else if (forecast.more.info.equals("暴雨")) { weatherImage.setImageResource(R.drawable.ic_baoyu); }
-            else if (forecast.more.info.equals("大暴雨")) { weatherImage.setImageResource(R.drawable.ic_dabaoyu); }
-            else if (forecast.more.info.equals("特大暴雨")) { weatherImage.setImageResource(R.drawable.ic_tedabaoyu); }
-            else if (forecast.more.info.equals("小雪")) { weatherImage.setImageResource(R.drawable.ic_xiaoxue); }
-            else if (forecast.more.info.equals("中雪")) { weatherImage.setImageResource(R.drawable.ic_zhongxue); }
-            else if (forecast.more.info.equals("大雪")) { weatherImage.setImageResource(R.drawable.ic_daxue); }
-            else if (forecast.more.info.equals("暴雪")) { weatherImage.setImageResource(R.drawable.ic_baoxue); }
-            else  { weatherImage.setImageResource(R.drawable.ic_weizhi); }
+            if (forecast.more.info.equals("晴")) {
+                weatherImage.setImageResource(R.drawable.ic_qing);
+            } else if (forecast.more.info.equals("多云")) {
+                weatherImage.setImageResource(R.drawable.ic_duoyun);
+            } else if (forecast.more.info.equals("少云")) {
+                weatherImage.setImageResource(R.drawable.ic_shaoyun);
+            } else if (forecast.more.info.equals("晴间多云")) {
+                weatherImage.setImageResource(R.drawable.ic_qingjianduoyun);
+            } else if (forecast.more.info.equals("阴")) {
+                weatherImage.setImageResource(R.drawable.ic_yin);
+            } else if (forecast.more.info.equals("阵雨")) {
+                weatherImage.setImageResource(R.drawable.ic_zhenyu);
+            } else if (forecast.more.info.equals("强阵雨")) {
+                weatherImage.setImageResource(R.drawable.ic_qiangzhenyu);
+            } else if (forecast.more.info.equals("雷阵雨")) {
+                weatherImage.setImageResource(R.drawable.ic_leizhenyu);
+            } else if (forecast.more.info.equals("强雷阵雨")) {
+                weatherImage.setImageResource(R.drawable.ic_qiangleizhenyu);
+            } else if (forecast.more.info.equals("小雨")) {
+                weatherImage.setImageResource(R.drawable.ic_xiaoyu);
+            } else if (forecast.more.info.equals("中雨")) {
+                weatherImage.setImageResource(R.drawable.ic_zhongyu);
+            } else if (forecast.more.info.equals("大雨")) {
+                weatherImage.setImageResource(R.drawable.ic_dayu);
+            } else if (forecast.more.info.equals("暴雨")) {
+                weatherImage.setImageResource(R.drawable.ic_baoyu);
+            } else if (forecast.more.info.equals("大暴雨")) {
+                weatherImage.setImageResource(R.drawable.ic_dabaoyu);
+            } else if (forecast.more.info.equals("特大暴雨")) {
+                weatherImage.setImageResource(R.drawable.ic_tedabaoyu);
+            } else if (forecast.more.info.equals("小雪")) {
+                weatherImage.setImageResource(R.drawable.ic_xiaoxue);
+            } else if (forecast.more.info.equals("中雪")) {
+                weatherImage.setImageResource(R.drawable.ic_zhongxue);
+            } else if (forecast.more.info.equals("大雪")) {
+                weatherImage.setImageResource(R.drawable.ic_daxue);
+            } else if (forecast.more.info.equals("暴雪")) {
+                weatherImage.setImageResource(R.drawable.ic_baoxue);
+            } else {
+                weatherImage.setImageResource(R.drawable.ic_weizhi);
+            }
 
 
             StringBuilder maxTemperature = new StringBuilder("最高: ");
