@@ -7,6 +7,6 @@
 
     <item
         android:id="@+id/local_city"
-        android:title="现实位置" />
+        android:title="自动定位" />
 
 </menu>
