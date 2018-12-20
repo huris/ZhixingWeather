@@ -15,7 +15,7 @@
         android:layout_gravity="center_vertical"
         android:textColor="#fff"
         android:textSize="18sp"
-        android:background="#8000"
+        android:background="#C000"
         />
 
     <Button
