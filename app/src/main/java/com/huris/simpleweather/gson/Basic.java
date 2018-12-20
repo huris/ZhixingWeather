@@ -7,18 +7,6 @@ public class Basic {
     // 由于JSON中的一些字段可能不太适合作为java的字段来命名
     // 因此这里使用了@SerializedName注解的方式来让JSON字段和JAVA之间建立映射关系
     /**
-     * 城市名
-     */
-    @SerializedName("city")
-    public String cityName;
-
-    /**
-     * 城市id
-     */
-    @SerializedName("id")
-    public String weatherId;
-
-    /**
      * 国家id
      */
     @SerializedName("cnty")
@@ -37,6 +25,29 @@ public class Basic {
     @SerializedName("parent_city")
     public String cityId;
 
+    /**
+     * 城市名
+     */
+    @SerializedName("city")
+    public String cityName;
+
+    /**
+     * 城市id
+     */
+    @SerializedName("id")
+    public String weatherId;
+
+    /**
+     * 经度
+     */
+    @SerializedName("lon")
+    public String longitude;
+
+    /**
+     * 纬度
+     */
+    @SerializedName("lat")
+    public String latitude;
 
     /**
      * 更新时间

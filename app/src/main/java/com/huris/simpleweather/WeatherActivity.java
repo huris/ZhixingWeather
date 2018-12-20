@@ -461,7 +461,6 @@ public class WeatherActivity extends AppCompatActivity {
         updateTime.append("刷新");
         String degree = weather.now.temperature + "℃";
         String weatherInfo = weather.now.more.info;
-//        titleCity.setText(cityName);
         titleUpdateTime.setText(updateTime);
         degreeText.setText(degree);
         weatherInfoText.setText(weatherInfo);
@@ -484,7 +483,6 @@ public class WeatherActivity extends AppCompatActivity {
             // 写好准确日期
             int MONTH = (forecast.date.charAt(5)-'0')*10+(forecast.date.charAt(6)-'0');
             int DAY = (forecast.date.charAt(8)-'0')*10+(forecast.date.charAt(9)-'0');
-
             dateText.setText(String.format("%02d.%02d/", MONTH,DAY)+
                     getWeekOfDate(stringToDate(forecast.date, "yyyy-MM-dd"))+"/"+day);
             infoText.setText(forecast.more.info);
