@@ -19,6 +19,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -515,15 +516,16 @@ public class WeatherActivity extends AppCompatActivity {
                 weatherImage.setImageResource(R.drawable.ic_weizhi);
             }
 
+            StringBuilder minTemperature = new StringBuilder("最低: ");
+            minTemperature.append("<font color='#00ccff'><big>"+forecast.temperature.min+"</big></font>");
+            minTemperature.append("℃");
 
             StringBuilder maxTemperature = new StringBuilder("最高: ");
-            maxTemperature.append(forecast.temperature.max);
+            maxTemperature.append("<font color='#FF4500'><big>"+forecast.temperature.max+"</big></font>");
             maxTemperature.append("℃");
-            StringBuilder minTemperature = new StringBuilder("最低: ");
-            minTemperature.append(forecast.temperature.min);
-            minTemperature.append("℃");
-            maxText.setText(maxTemperature);
-            minText.setText(minTemperature);
+
+            maxText.setText(Html.fromHtml(String.valueOf(maxTemperature)));
+            minText.setText(Html.fromHtml(String.valueOf(minTemperature)));
             forecastLayout.addView(view);
         }
         if (weather.aqi != null) {
@@ -534,7 +536,7 @@ public class WeatherActivity extends AppCompatActivity {
             if(weather.aqi.city.qlty.length()>1)
             {
                 // 将字体的大小设置为23,该参数通过调参解决
-                qualityText.setTextSize((float) 23);
+                qualityText.setTextSize((float) 22);
                 StringBuilder tmp = new StringBuilder();
                 tmp.append(" ");  // 添加一个空格刚好实现居中
                 tmp.append(weather.aqi.city.qlty.charAt(0)).
@@ -554,12 +556,12 @@ public class WeatherActivity extends AppCompatActivity {
             visibilityText.setText(weather.now.visibility);
             precipitationText.setText(weather.now.precipitation);
         }
-        String comfort = "舒适度：" + weather.suggestion.comfort.info;
-        String carWash = "洗车指数：" + weather.suggestion.carWash.info;
-        String sport = "运行建议：" + weather.suggestion.sport.info;
-        comfortText.setText(comfort);
-        carWashText.setText(carWash);
-        sportText.setText(sport);
+        String comfort = "<font color='#99ffff'><big>舒适度</big></font>  " + weather.suggestion.comfort.info;
+        String carWash = "<font color='#99ffff'><big>洗车指数</big></font>  " + weather.suggestion.carWash.info;
+        String sport = "<font color='#99ffff'><big>运行建议</big></font>  " + weather.suggestion.sport.info;
+        comfortText.setText(Html.fromHtml(comfort));
+        carWashText.setText(Html.fromHtml(carWash));
+        sportText.setText(Html.fromHtml(sport));
         // 设置完之后要将ScrollView设置为可见
         weatherLayout.setVisibility(View.VISIBLE);
         // 在showWeatherInfo()方法的最后加入启动AutoUpdateService这个服务的代码
@@ -570,3 +572,9 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
 }
+
+//    StringBuilder maxTemperature = new StringBuilder("最高: ");
+//            maxTemperature.append("<font color='#FF4500'><big>"+forecast.temperature.max+"</big></font>");
+//                    maxTemperature.append("℃");
+//
+//                    maxText.setText(Html.fromHtml(String.valueOf(maxTemperature)));
