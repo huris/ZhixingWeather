@@ -1,6 +1,8 @@
 package com.huris.simpleweather;
 
 import android.Manifest;
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -43,11 +45,16 @@ import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.model.LatLng;
 import com.bumptech.glide.Glide;
+import com.huris.simpleweather.db.City;
+import com.huris.simpleweather.db.County;
+import com.huris.simpleweather.db.Province;
 import com.huris.simpleweather.gson.Forecast;
 import com.huris.simpleweather.gson.Weather;
 import com.huris.simpleweather.service.AutoUpdateService;
 import com.huris.simpleweather.util.HttpUtil;
 import com.huris.simpleweather.util.Utility;
+
+import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -56,12 +63,49 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
 import okhttp3.Response;
 
 import static com.huris.simpleweather.util.TimeUtil.getWeekOfDate;
 import static com.huris.simpleweather.util.TimeUtil.stringToDate;
 
 public class WeatherActivity extends AppCompatActivity {
+
+    private String loCounty;
+
+    private Province loProvince;
+
+    private City loCity;
+
+    private List<String> dataList = new ArrayList<>();
+
+    /**
+     * 省列表
+     */
+    private List<Province> provinceList;
+
+    /**
+     * 市列表
+     */
+    private List<City> cityList;
+
+    /**
+     * 县列表
+     */
+    private List<County> countyList;
+
+    // 定位国家
+    private String localNation;
+
+    // 定位省
+    private String localProvince;
+
+    // 定位城市
+    private String localCity;
+
+    // 定位区
+    private String localDistrict;
 
     private TextView windSpeedText;
 
@@ -325,6 +369,13 @@ public class WeatherActivity extends AppCompatActivity {
                     currentPosition.append("位置：").append(location.getAddrStr()).append("\n");
                     currentPosition.append("经度：").append(location.getLongitude()).append("   ");
                     currentPosition.append("纬度：").append(location.getLatitude()).append("\n");
+
+                    // 获取当前地址的详细信息
+                    localNation = location.getCountry();
+                    localProvince = location.getProvince();
+                    localCity = location.getCity();
+                    localDistrict = location.getDistrict();
+
 //                    currentPosition.append("国家：").append(location.getCountry()).append("   ");
 //                    currentPosition.append("省份：").append(location.getProvince()).append("\n");
 //                    currentPosition.append("市：").append(location.getCity()).append("   ");
@@ -400,15 +451,62 @@ public class WeatherActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.add_city:
-                Toast.makeText(this, "add", Toast.LENGTH_SHORT).show();
-                break;
             case R.id.local_city:
-                Toast.makeText(this, "local", Toast.LENGTH_SHORT).show();
+                this.swipeRefresh.setRefreshing(true);
+                // 查找对应的省份
+                loProvince = DataSupport.where("provincename = ?", localProvince.substring(0, 2)).findFirst(Province.class);
+                // 查找对应的城市
+                cityList = DataSupport.where("provinceid = ?", String.valueOf(loProvince.getId())).find(City.class);
+                loCity = null;
+                // 在对应的城市中查找相应的县
+                for (City city : cityList) {
+                    if (city.getCityName().equals(localCity.substring(0, 2))) {
+                        loCity = city;
+                        break;
+                    }
+                }
+                countyList = DataSupport.where("cityid = ?", String.valueOf(loCity.getId())).find(County.class);
+                // 如果是市中心的区,则显示该城市的天气
+                loCounty = countyList.get(0).getWeatherId();
+                for (County county : countyList) {
+                    if (county.getCountyName().equals(localDistrict.substring(0, 2))) {
+                        // 如果是该城市的县,则显示该城市的县的天气
+                        loCounty = county.getWeatherId();
+                        break;
+                    }
+                }
+                this.requestWeather(loCounty);
                 break;
         }
         return true;
     }
+
+
+    /**
+     * 根据传入的地址和类型从服务器上查询省市县数据。
+     */
+    private void queryFromServer(final String address, final String type) {
+        // 调用HttpUtil的sendOkHttpRequest()方法向服务器发送请求
+        // 响应的数据会送到onResponse()方法中
+        HttpUtil.sendOkHttpRequest(address, new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String responseText = response.body().string();
+                boolean result = false;
+                if ("city".equals(type)) {
+                    result = Utility.handleCityResponse(responseText, loProvince.getId());
+                } else if ("county".equals(type)) {
+                    result = Utility.handleCountyResponse(responseText, loCity.getId());
+                }
+            }
+
+            @Override
+            public void onFailure(Call call, IOException e) {
+                queryFromServer(address, type);
+            }
+        });
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -481,10 +579,10 @@ public class WeatherActivity extends AppCompatActivity {
             else if (i == 2) day = "后天";
             i++;
             // 写好准确日期
-            int MONTH = (forecast.date.charAt(5)-'0')*10+(forecast.date.charAt(6)-'0');
-            int DAY = (forecast.date.charAt(8)-'0')*10+(forecast.date.charAt(9)-'0');
-            dateText.setText(String.format("%02d.%02d/", MONTH,DAY)+
-                    getWeekOfDate(stringToDate(forecast.date, "yyyy-MM-dd"))+"/"+day);
+            int MONTH = (forecast.date.charAt(5) - '0') * 10 + (forecast.date.charAt(6) - '0');
+            int DAY = (forecast.date.charAt(8) - '0') * 10 + (forecast.date.charAt(9) - '0');
+            dateText.setText(String.format("%02d.%02d/", MONTH, DAY) +
+                    getWeekOfDate(stringToDate(forecast.date, "yyyy-MM-dd")) + "/" + day);
             infoText.setText(forecast.more.info);
             if (forecast.more.info.equals("晴")) {
                 weatherImage.setImageResource(R.drawable.ic_qing);
