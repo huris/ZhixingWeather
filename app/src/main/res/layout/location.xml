@@ -34,6 +34,7 @@
             android:textColor="#fff"
             android:textSize="18sp"
             android:background="#C000"
+            android:layout_marginBottom="7dp"
             />
 
         <Button
@@ -44,6 +45,8 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/holo_blue_dark"
+            android:layout_marginBottom="7dp"
+            android:layout_marginRight="7dp"
             />
     </LinearLayout>
 

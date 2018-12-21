@@ -647,9 +647,9 @@ public class WeatherActivity extends AppCompatActivity {
 
             StringBuilder minTemperature = new StringBuilder("最低:");
             if (forecast.temperature.min.length() == 1) {
-                minTemperature.append("&#160");
+                minTemperature.append("&#160").append("&#160").append("&#160").append("&#160");
             }else if (forecast.temperature.min.length() == 2) {
-                minTemperature.append("&#160").append("&#160");
+                minTemperature.append("&#160");
             }
 
             minTemperature.append("<font color='#00ccff'><big>" + forecast.temperature.min + "</big></font>");
@@ -657,9 +657,9 @@ public class WeatherActivity extends AppCompatActivity {
 
             StringBuilder maxTemperature = new StringBuilder("最高: ");
             if (forecast.temperature.max.length() == 1) {
-                maxTemperature.append("&#160");
+                maxTemperature.append("&#160").append("&#160").append("&#160").append("&#160");
             }else if (forecast.temperature.max.length() == 2) {
-                maxTemperature.append("&#160").append("&#160");
+                maxTemperature.append("&#160");
             }
             maxTemperature.append("<font color='#FF4500'><big>" + forecast.temperature.max + "</big></font>");
             maxTemperature.append("℃");
