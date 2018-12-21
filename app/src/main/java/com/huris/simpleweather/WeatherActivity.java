@@ -48,6 +48,7 @@ import com.bumptech.glide.Glide;
 import com.huris.simpleweather.db.City;
 import com.huris.simpleweather.db.County;
 import com.huris.simpleweather.db.Province;
+import com.huris.simpleweather.gson.Basic;
 import com.huris.simpleweather.gson.Forecast;
 import com.huris.simpleweather.gson.Weather;
 import com.huris.simpleweather.service.AutoUpdateService;
@@ -71,6 +72,8 @@ import static com.huris.simpleweather.util.TimeUtil.getWeekOfDate;
 import static com.huris.simpleweather.util.TimeUtil.stringToDate;
 
 public class WeatherActivity extends AppCompatActivity {
+
+    private StringBuilder localPosition;
 
     private String loCounty;
 
@@ -216,6 +219,7 @@ public class WeatherActivity extends AppCompatActivity {
         // 首先获取到DrawerLayout和Button的实例
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 //        navButton = (Button) findViewById(R.id.nav_button);
+
         mapPosition = (Button) findViewById(R.id.map_position);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -262,7 +266,6 @@ public class WeatherActivity extends AppCompatActivity {
             Weather weather = Utility.handleWeatherResponse(weatherString);
             mWeatherId = weather.basic.weatherId;
             showWeatherInfo(weather);
-
         } else {
             // 第一次肯定是没有缓存的,因此就会从Intent中取出天气id,并调用requestWeather()方法从服务器中请求天气数据
             // 无缓存时去服务器查询天气
@@ -359,13 +362,13 @@ public class WeatherActivity extends AppCompatActivity {
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    StringBuilder currentPosition = new StringBuilder();
+                    localPosition = new StringBuilder();
 //                    addressName = new StringBuilder();
 //                    addressName.append(location.getDistrict()).append(location.getStreet());
 //                    getSupportActionBar().setSubtitle(addressName);
-                    currentPosition.append("位置：").append(location.getAddrStr()).append("\n");
-                    currentPosition.append("经度：").append(location.getLongitude()).append("   ");
-                    currentPosition.append("纬度：").append(location.getLatitude()).append("\n");
+                    localPosition.append("位置：").append(location.getAddrStr()).append("\n");
+                    localPosition.append("经度：").append(location.getLongitude()).append("   ");
+                    localPosition.append("纬度：").append(location.getLatitude()).append("\n");
 
                     // 获取当前地址的详细信息
                     localNation = location.getCountry();
@@ -378,13 +381,13 @@ public class WeatherActivity extends AppCompatActivity {
 //                    currentPosition.append("市：").append(location.getCity()).append("   ");
 //                    currentPosition.append("区：").append(location.getDistrict()).append("\n");
 //                    currentPosition.append("街道：").append(location.getBuildingName()).append("  ");
-                    currentPosition.append("定位方式：");
+                    localPosition.append("定位方式：");
                     if (location.getLocType() == BDLocation.TypeGpsLocation) {
-                        currentPosition.append("GPS");
+                        localPosition.append("GPS");
                     } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
-                        currentPosition.append("网络");
+                        localPosition.append("网络");
                     }
-                    positionText.setText(currentPosition);
+                    positionText.setText(localPosition);
                 }
             });
         }
@@ -417,6 +420,17 @@ public class WeatherActivity extends AppCompatActivity {
                             editor.putString("weather", responseText);
                             editor.apply();
                             mWeatherId = weather.basic.weatherId;
+                            StringBuilder currentPosition = new StringBuilder();
+                            Basic basic = weather.basic;
+                            currentPosition.append("位置：").append(basic.countryId + basic.provinceId + "省" + basic.cityId + "市" );
+                            if (basic.cityId.equals(basic.cityName)) {
+                                currentPosition.append("市区").append("\n");
+                            } else {
+                                currentPosition.append(basic.cityName).append("\n");
+                            }
+                            currentPosition.append("经度：").append(basic.longitude.substring(0,10)).append("   ");
+                            currentPosition.append("纬度：").append(basic.latitude.substring(0,10));
+                            positionText.setText(currentPosition);
                             // 需要调用showWeatherInfo()方法来进行内容的显示
                             showWeatherInfo(weather);
                         } else {
@@ -473,6 +487,7 @@ public class WeatherActivity extends AppCompatActivity {
                     }
                 }
                 this.requestWeather(loCounty);
+                positionText.setText(localPosition);
                 break;
         }
         return true;
@@ -547,10 +562,12 @@ public class WeatherActivity extends AppCompatActivity {
     /**
      * 处理并展示Weather实体类中的数据。
      * 从Weather对象中获取数据,然后显示在相应的控件上
+     * td
      */
+
+    // TODO: 2018/12/21 Huris
     private void showWeatherInfo(Weather weather) {
         String cityName = weather.basic.cityName;
-//        positionText
         getSupportActionBar().setTitle(cityName);
         StringBuilder updateTime = new StringBuilder();
         updateTime.append(weather.basic.update.updateTime.split(" ")[1]);
@@ -638,38 +655,41 @@ public class WeatherActivity extends AppCompatActivity {
         }
         if (weather.aqi != null) {
 
-            int aqiNum = Integer.parseInt(weather.aqi.city.aqi);
-            if (aqiNum > 300) {
-                aqiText.setText(Html.fromHtml("<font color='#7e0023'><big>" + weather.aqi.city.aqi + "</big></font>"));
-            } else if (aqiNum > 200) {
-                aqiText.setText(Html.fromHtml("<font color='#99004c'><big>" + weather.aqi.city.aqi + "</big></font>"));
-            } else if (aqiNum > 150) {
+            try{
+                int aqiNum = Integer.parseInt(weather.aqi.city.aqi);
+                if (aqiNum > 300) {
+                    aqiText.setText(Html.fromHtml("<font color='#7e0023'><big>" + weather.aqi.city.aqi + "</big></font>"));
+                } else if (aqiNum > 200) {
+                    aqiText.setText(Html.fromHtml("<font color='#99004c'><big>" + weather.aqi.city.aqi + "</big></font>"));
+                } else if (aqiNum > 150) {
+                    aqiText.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.aqi + "</big></font>"));
+                } else if (aqiNum > 100) {
+                    aqiText.setText(Html.fromHtml("<font color='#ff7e00'><big>" + weather.aqi.city.aqi + "</big></font>"));
+                } else if (aqiNum > 50) {
+                    aqiText.setText(Html.fromHtml("<font color='#ffff00'><big>" + weather.aqi.city.aqi + "</big></font>"));
+                }
+            } catch (Exception e){
                 aqiText.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.aqi + "</big></font>"));
-            } else if (aqiNum > 100) {
-                aqiText.setText(Html.fromHtml("<font color='#ff7e00'><big>" + weather.aqi.city.aqi + "</big></font>"));
-            } else if (aqiNum > 50) {
-                aqiText.setText(Html.fromHtml("<font color='#ffff00'><big>" + weather.aqi.city.aqi + "</big></font>"));
-            } else {
-                aqiText.setText(Html.fromHtml("<font color='#00e400'><big>" + weather.aqi.city.aqi + "</big></font>"));
             }
 
-            int pm25Num = Integer.parseInt(weather.aqi.city.pm25);
-            if (pm25Num > 100) {
-                pm25Text.setText(Html.fromHtml("<font color='#f00082'><big>" + weather.aqi.city.pm25 + "</big></font>"));
-            } else if (pm25Num > 85) {
-                pm25Text.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.pm25 + "</big></font>"));
-            } else if (pm25Num > 60) {
-                pm25Text.setText(Html.fromHtml("<font color='#ff9900'><big>" + weather.aqi.city.pm25 + "</big></font>"));
-            } else if (pm25Num > 35) {
-                pm25Text.setText(Html.fromHtml("<font color='#ffff00'><big>" + weather.aqi.city.pm25 + "</big></font>"));
-            } else if (pm25Num > 15) {
-                pm25Text.setText(Html.fromHtml("<font color='#00ff33'><big>" + weather.aqi.city.pm25 + "</big></font>"));
-            }else if (pm25Num > 5) {
-                pm25Text.setText(Html.fromHtml("<font color='#00a0ff'><big>" + weather.aqi.city.pm25 + "</big></font>"));
-            }
-            else if (pm25Num >= 0) {
-                pm25Text.setText(Html.fromHtml("<font color='#1e3cff'><big>" + weather.aqi.city.pm25 + "</big></font>"));
-            } else {
+            try {
+                int pm25Num = Integer.parseInt(weather.aqi.city.pm25);
+                if (pm25Num > 100) {
+                    pm25Text.setText(Html.fromHtml("<font color='#f00082'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+                } else if (pm25Num > 85) {
+                    pm25Text.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+                } else if (pm25Num > 60) {
+                    pm25Text.setText(Html.fromHtml("<font color='#ff9900'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+                } else if (pm25Num > 35) {
+                    pm25Text.setText(Html.fromHtml("<font color='#ffff00'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+                } else if (pm25Num > 15) {
+                    pm25Text.setText(Html.fromHtml("<font color='#00ff33'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+                } else if (pm25Num > 5) {
+                    pm25Text.setText(Html.fromHtml("<font color='#00a0ff'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+                } else if (pm25Num >= 0) {
+                    pm25Text.setText(Html.fromHtml("<font color='#1e3cff'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+                }
+            } catch (Exception e){
                 pm25Text.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.pm25 + "</big></font>"));
             }
 //            pm25Text.setText(weather.aqi.city.pm25);
@@ -678,7 +698,6 @@ public class WeatherActivity extends AppCompatActivity {
             try {
                 if (weather.aqi.city.qlty.length() > 1) {
                     // 将字体的大小设置为23,该参数通过调参解决
-                    qualityText.setTextSize((float) 22);
                     StringBuilder tmp = new StringBuilder();
                     tmp.append("&#160");  // 添加一个空格刚好实现居中
                     tmp.append(weather.aqi.city.qlty.charAt(0)).
@@ -686,6 +705,8 @@ public class WeatherActivity extends AppCompatActivity {
                     tmp.append("&#160");
                     tmp.append(weather.aqi.city.qlty.charAt(2)).
                             append(weather.aqi.city.qlty.charAt(3));
+                    int aqiNum = Integer.parseInt(weather.aqi.city.aqi);
+                    qualityText.setTextSize((float) 22);
                     if (aqiNum > 300) {
                         qualityText.setText(Html.fromHtml("<font color='#7e0023'><big>" + tmp + "</big></font>"));
                     } else if (aqiNum > 200) {
@@ -702,6 +723,7 @@ public class WeatherActivity extends AppCompatActivity {
 
                 } else {
                     // 否则就显示原来的字体大小
+                    int aqiNum = Integer.parseInt(weather.aqi.city.aqi);
                     if (aqiNum > 300) {
                         qualityText.setText(Html.fromHtml("<font color='#7e0023'><big>" + weather.aqi.city.qlty + "</big></font>"));
                     } else if (aqiNum > 200) {
