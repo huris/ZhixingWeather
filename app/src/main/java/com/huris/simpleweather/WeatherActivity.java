@@ -567,8 +567,7 @@ public class WeatherActivity extends AppCompatActivity {
         }
         currentPosition.append("经度：").append(basic.longitude.substring(0, 10)).append("   ");
         currentPosition.append("纬度：").append(basic.latitude.substring(0, 10));
-        if(flag == 0)
-            positionText.setText(currentPosition);
+        positionText.setText(currentPosition);
         getSupportActionBar().setTitle(cityName);
         StringBuilder updateTime = new StringBuilder();
         updateTime.append(weather.basic.update.updateTime.split(" ")[1]);
@@ -638,20 +637,29 @@ public class WeatherActivity extends AppCompatActivity {
                 weatherImage.setImageResource(R.drawable.ic_daxue);
             } else if (forecast.more.info.equals("暴雪")) {
                 weatherImage.setImageResource(R.drawable.ic_baoxue);
+            } else if (forecast.more.info.equals("雾")) {
+                weatherImage.setImageResource(R.drawable.ic_wu);
+            } else if (forecast.more.info.equals("雨夹雪")) {
+                weatherImage.setImageResource(R.drawable.ic_yujiaxue);
             } else {
                 weatherImage.setImageResource(R.drawable.ic_weizhi);
             }
 
             StringBuilder minTemperature = new StringBuilder("最低:");
-            if(Integer.parseInt(forecast.temperature.min)<10){
-                minTemperature.append("&#160").append("&#160").append("&#160");
+            if (forecast.temperature.min.length() == 1) {
+                minTemperature.append("&#160");
+            }else if (forecast.temperature.min.length() == 2) {
+                minTemperature.append("&#160").append("&#160");
             }
+
             minTemperature.append("<font color='#00ccff'><big>" + forecast.temperature.min + "</big></font>");
             minTemperature.append("℃");
 
             StringBuilder maxTemperature = new StringBuilder("最高: ");
-            if(Integer.parseInt(forecast.temperature.max)<10){
-                maxTemperature.append("&#160").append("&#160").append("&#160");
+            if (forecast.temperature.max.length() == 1) {
+                maxTemperature.append("&#160");
+            }else if (forecast.temperature.max.length() == 2) {
+                maxTemperature.append("&#160").append("&#160");
             }
             maxTemperature.append("<font color='#FF4500'><big>" + forecast.temperature.max + "</big></font>");
             maxTemperature.append("℃");
@@ -731,6 +739,7 @@ public class WeatherActivity extends AppCompatActivity {
                 } else {
                     // 否则就显示原来的字体大小
                     int aqiNum = Integer.parseInt(weather.aqi.city.aqi);
+                    qualityText.setTextSize((float) 40);
                     if (aqiNum > 300) {
                         qualityText.setText(Html.fromHtml("<font color='#7e0023'><big>" + weather.aqi.city.qlty + "</big></font>"));
                     } else if (aqiNum > 200) {

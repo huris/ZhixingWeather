@@ -1,32 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="15dp">
+    android:layout_height="wrap_content"
+    android:layout_margin="15dp"
+    android:background="#C000">
 
-    <!--显示当前的经纬度-->
+    <!--定义一个标题-->
     <TextView
-        android:id="@+id/position_text_view"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_weight="6"
-        android:layout_gravity="center_vertical"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:text="城市定位"
         android:textColor="#fff"
-        android:textSize="18sp"
-        android:background="#C000"
-        />
+        android:textSize="20sp"
+        android:textStyle="bold"/>
 
-    <Button
-        android:id="@+id/map_position"
-        android:text="地图位置"
-        android:textSize="19sp"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:background="@android:color/holo_blue_dark"
-        />
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp">
+
+        <!--显示当前的经纬度-->
+        <TextView
+            android:id="@+id/position_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:layout_gravity="center_vertical"
+            android:textColor="#fff"
+            android:textSize="18sp"
+            android:background="#C000"
+            />
+
+        <Button
+            android:id="@+id/map_position"
+            android:text="地图位置"
+            android:textSize="19sp"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@android:color/holo_blue_dark"
+            />
+    </LinearLayout>
+
 
 
 </LinearLayout>
