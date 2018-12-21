@@ -175,9 +175,6 @@ public class WeatherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_weather);
         // 初始化各控件,获取各控件的实例
 
-        // 菜单
-//        menu = (Menu) findViewById(R.menu.menu);
-
         // 首先创建一个LocationClient的实例
         // LocationClient的构建函数接收一个Context参数,
         // 这里调用getApplicationContext()方法来获取一个全局的Context参数并传入
@@ -553,6 +550,7 @@ public class WeatherActivity extends AppCompatActivity {
      */
     private void showWeatherInfo(Weather weather) {
         String cityName = weather.basic.cityName;
+//        positionText
         getSupportActionBar().setTitle(cityName);
         StringBuilder updateTime = new StringBuilder();
         updateTime.append(weather.basic.update.updateTime.split(" ")[1]);
@@ -639,25 +637,87 @@ public class WeatherActivity extends AppCompatActivity {
             forecastLayout.addView(view);
         }
         if (weather.aqi != null) {
-            aqiText.setText(weather.aqi.city.aqi);
-            pm25Text.setText(weather.aqi.city.pm25);
+
+            int aqiNum = Integer.parseInt(weather.aqi.city.aqi);
+            if (aqiNum > 300) {
+                aqiText.setText(Html.fromHtml("<font color='#7e0023'><big>" + weather.aqi.city.aqi + "</big></font>"));
+            } else if (aqiNum > 200) {
+                aqiText.setText(Html.fromHtml("<font color='#99004c'><big>" + weather.aqi.city.aqi + "</big></font>"));
+            } else if (aqiNum > 150) {
+                aqiText.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.aqi + "</big></font>"));
+            } else if (aqiNum > 100) {
+                aqiText.setText(Html.fromHtml("<font color='#ff7e00'><big>" + weather.aqi.city.aqi + "</big></font>"));
+            } else if (aqiNum > 50) {
+                aqiText.setText(Html.fromHtml("<font color='#ffff00'><big>" + weather.aqi.city.aqi + "</big></font>"));
+            } else {
+                aqiText.setText(Html.fromHtml("<font color='#00e400'><big>" + weather.aqi.city.aqi + "</big></font>"));
+            }
+
+            int pm25Num = Integer.parseInt(weather.aqi.city.pm25);
+            if (pm25Num > 100) {
+                pm25Text.setText(Html.fromHtml("<font color='#f00082'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+            } else if (pm25Num > 85) {
+                pm25Text.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+            } else if (pm25Num > 60) {
+                pm25Text.setText(Html.fromHtml("<font color='#ff9900'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+            } else if (pm25Num > 35) {
+                pm25Text.setText(Html.fromHtml("<font color='#ffff00'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+            } else if (pm25Num > 15) {
+                pm25Text.setText(Html.fromHtml("<font color='#00ff33'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+            }else if (pm25Num > 5) {
+                pm25Text.setText(Html.fromHtml("<font color='#00a0ff'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+            }
+            else if (pm25Num >= 0) {
+                pm25Text.setText(Html.fromHtml("<font color='#1e3cff'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+            } else {
+                pm25Text.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.pm25 + "</big></font>"));
+            }
+//            pm25Text.setText(weather.aqi.city.pm25);
             // 当天气状况的子数多于一个的时候,为了能够保持界面美观
             // 需要重新设置字体的大小
-            if (weather.aqi.city.qlty.length() > 1) {
-                // 将字体的大小设置为23,该参数通过调参解决
-                qualityText.setTextSize((float) 22);
-                StringBuilder tmp = new StringBuilder();
-                tmp.append(" ");  // 添加一个空格刚好实现居中
-                tmp.append(weather.aqi.city.qlty.charAt(0)).
-                        append(weather.aqi.city.qlty.charAt(1)).append("\n");
-                tmp.append(" ");
-                tmp.append(weather.aqi.city.qlty.charAt(2)).
-                        append(weather.aqi.city.qlty.charAt(3));
-                qualityText.setText(tmp);
+            try {
+                if (weather.aqi.city.qlty.length() > 1) {
+                    // 将字体的大小设置为23,该参数通过调参解决
+                    qualityText.setTextSize((float) 22);
+                    StringBuilder tmp = new StringBuilder();
+                    tmp.append("&#160");  // 添加一个空格刚好实现居中
+                    tmp.append(weather.aqi.city.qlty.charAt(0)).
+                            append(weather.aqi.city.qlty.charAt(1)).append("<br>");
+                    tmp.append("&#160");
+                    tmp.append(weather.aqi.city.qlty.charAt(2)).
+                            append(weather.aqi.city.qlty.charAt(3));
+                    if (aqiNum > 300) {
+                        qualityText.setText(Html.fromHtml("<font color='#7e0023'><big>" + tmp + "</big></font>"));
+                    } else if (aqiNum > 200) {
+                        qualityText.setText(Html.fromHtml("<font color='#99004c'><big>" + tmp + "</big></font>"));
+                    } else if (aqiNum > 150) {
+                        qualityText.setText(Html.fromHtml("<font color='#ff0000'><big>" + tmp + "</big></font>"));
+                    } else if (aqiNum > 100) {
+                        qualityText.setText(Html.fromHtml("<font color='#ff7e00'><big>" + tmp + "</big></font>"));
+                    } else if (aqiNum > 50) {
+                        qualityText.setText(Html.fromHtml("<font color='#ffff00'><big>" + tmp + "</big></font>"));
+                    } else {
+                        qualityText.setText(Html.fromHtml("<font color='#00e400'><big>" + tmp + "</big></font>"));
+                    }
 
-            } else {
-                // 否则就显示原来的字体大小
-                qualityText.setText(weather.aqi.city.qlty);
+                } else {
+                    // 否则就显示原来的字体大小
+                    if (aqiNum > 300) {
+                        qualityText.setText(Html.fromHtml("<font color='#7e0023'><big>" + weather.aqi.city.qlty + "</big></font>"));
+                    } else if (aqiNum > 200) {
+                        qualityText.setText(Html.fromHtml("<font color='#99004c'><big>" + weather.aqi.city.qlty + "</big></font>"));
+                    } else if (aqiNum > 150) {
+                        qualityText.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.qlty + "</big></font>"));
+                    } else if (aqiNum > 100) {
+                        qualityText.setText(Html.fromHtml("<font color='#ff7e00'><big>" + weather.aqi.city.qlty + "</big></font>"));
+                    } else if (aqiNum > 50) {
+                        qualityText.setText(Html.fromHtml("<font color='#ffff00'><big>" + weather.aqi.city.qlty + "</big></font>"));
+                    } else {
+                        qualityText.setText(Html.fromHtml("<font color='#00e400'><big>" + weather.aqi.city.qlty + "</big></font>"));
+                    }
+                }
+            } catch (Exception e) {
+                qualityText.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.qlty + "</big></font>"));
             }
         }
         if (weather.now != null) {
@@ -665,9 +725,9 @@ public class WeatherActivity extends AppCompatActivity {
             visibilityText.setText(weather.now.visibility);
             precipitationText.setText(weather.now.precipitation);
         }
-        String comfort = "<font color='#99ffff'><big>舒适度</big></font>  " + weather.suggestion.comfort.info;
-        String carWash = "<font color='#99ffff'><big>洗车指数</big></font>  " + weather.suggestion.carWash.info;
-        String sport = "<font color='#99ffff'><big>运行建议</big></font>  " + weather.suggestion.sport.info;
+        String comfort = "<font color='#99ffff'><big>舒适度:</big></font>" + weather.suggestion.comfort.info;
+        String carWash = "<font color='#99ffff'><big>洗车指数:</big></font>" + weather.suggestion.carWash.info;
+        String sport = "<font color='#99ffff'><big>运行建议:</big></font>" + weather.suggestion.sport.info;
         comfortText.setText(Html.fromHtml(comfort));
         carWashText.setText(Html.fromHtml(carWash));
         sportText.setText(Html.fromHtml(sport));
