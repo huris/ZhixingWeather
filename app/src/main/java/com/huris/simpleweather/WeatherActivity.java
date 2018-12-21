@@ -73,6 +73,8 @@ import static com.huris.simpleweather.util.TimeUtil.stringToDate;
 
 public class WeatherActivity extends AppCompatActivity {
 
+    private int flag = 0;
+
     private StringBuilder localPosition;
 
     private String loCounty;
@@ -376,7 +378,6 @@ public class WeatherActivity extends AppCompatActivity {
                     localDistrict = location.getDistrict();
 
 
-
 //                    currentPosition.append("国家：").append(location.getCountry()).append("   ");
 //                    currentPosition.append("省份：").append(location.getProvince()).append("\n");
 //                    currentPosition.append("市：").append(location.getCity()).append("   ");
@@ -558,15 +559,16 @@ public class WeatherActivity extends AppCompatActivity {
         String cityName = weather.basic.cityName;
         StringBuilder currentPosition = new StringBuilder();
         Basic basic = weather.basic;
-        currentPosition.append("位置：").append(basic.countryId + basic.provinceId + "省" + basic.cityId + "市" );
+        currentPosition.append("位置：").append(basic.countryId + basic.provinceId + "省" + basic.cityId + "市");
         if (basic.cityId.equals(basic.cityName)) {
             currentPosition.append("市区").append("\n");
         } else {
             currentPosition.append(basic.cityName).append("\n");
         }
-        currentPosition.append("经度：").append(basic.longitude.substring(0,10)).append("   ");
-        currentPosition.append("纬度：").append(basic.latitude.substring(0,10));
-        positionText.setText(currentPosition);
+        currentPosition.append("经度：").append(basic.longitude.substring(0, 10)).append("   ");
+        currentPosition.append("纬度：").append(basic.latitude.substring(0, 10));
+        if(flag == 0)
+            positionText.setText(currentPosition);
         getSupportActionBar().setTitle(cityName);
         StringBuilder updateTime = new StringBuilder();
         updateTime.append(weather.basic.update.updateTime.split(" ")[1]);
@@ -654,7 +656,7 @@ public class WeatherActivity extends AppCompatActivity {
         }
         if (weather.aqi != null) {
 
-            try{
+            try {
                 int aqiNum = Integer.parseInt(weather.aqi.city.aqi);
                 if (aqiNum > 300) {
                     aqiText.setText(Html.fromHtml("<font color='#7e0023'><big>" + weather.aqi.city.aqi + "</big></font>"));
@@ -667,7 +669,7 @@ public class WeatherActivity extends AppCompatActivity {
                 } else if (aqiNum > 50) {
                     aqiText.setText(Html.fromHtml("<font color='#ffff00'><big>" + weather.aqi.city.aqi + "</big></font>"));
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 aqiText.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.aqi + "</big></font>"));
             }
 
@@ -688,7 +690,7 @@ public class WeatherActivity extends AppCompatActivity {
                 } else if (pm25Num >= 0) {
                     pm25Text.setText(Html.fromHtml("<font color='#1e3cff'><big>" + weather.aqi.city.pm25 + "</big></font>"));
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 pm25Text.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.pm25 + "</big></font>"));
             }
 //            pm25Text.setText(weather.aqi.city.pm25);
