@@ -642,11 +642,17 @@ public class WeatherActivity extends AppCompatActivity {
                 weatherImage.setImageResource(R.drawable.ic_weizhi);
             }
 
-            StringBuilder minTemperature = new StringBuilder("最低: ");
+            StringBuilder minTemperature = new StringBuilder("最低:");
+            if(Integer.parseInt(forecast.temperature.min)<10){
+                minTemperature.append("&#160").append("&#160").append("&#160");
+            }
             minTemperature.append("<font color='#00ccff'><big>" + forecast.temperature.min + "</big></font>");
             minTemperature.append("℃");
 
             StringBuilder maxTemperature = new StringBuilder("最高: ");
+            if(Integer.parseInt(forecast.temperature.max)<10){
+                maxTemperature.append("&#160").append("&#160").append("&#160");
+            }
             maxTemperature.append("<font color='#FF4500'><big>" + forecast.temperature.max + "</big></font>");
             maxTemperature.append("℃");
 
@@ -748,9 +754,9 @@ public class WeatherActivity extends AppCompatActivity {
             visibilityText.setText(weather.now.visibility);
             precipitationText.setText(weather.now.precipitation);
         }
-        String comfort = "<font color='#99ffff'><big>舒适度:</big></font>" + weather.suggestion.comfort.info;
-        String carWash = "<font color='#99ffff'><big>洗车指数:</big></font>" + weather.suggestion.carWash.info;
-        String sport = "<font color='#99ffff'><big>运行建议:</big></font>" + weather.suggestion.sport.info;
+        String comfort = "<font color='#99ffff'><big>舒适度:</big></font>&#160&#160" + weather.suggestion.comfort.info;
+        String carWash = "<font color='#99ffff'><big>洗车指数:</big></font>&#160&#160" + weather.suggestion.carWash.info;
+        String sport = "<font color='#99ffff'><big>运行建议:</big></font>&#160&#160" + weather.suggestion.sport.info;
         comfortText.setText(Html.fromHtml(comfort));
         carWashText.setText(Html.fromHtml(carWash));
         sportText.setText(Html.fromHtml(sport));
