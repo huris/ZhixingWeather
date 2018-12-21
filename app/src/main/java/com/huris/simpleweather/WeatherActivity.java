@@ -178,13 +178,6 @@ public class WeatherActivity extends AppCompatActivity {
         setContentView(R.layout.activity_weather);
         // 初始化各控件,获取各控件的实例
 
-        // 首先创建一个LocationClient的实例
-        // LocationClient的构建函数接收一个Context参数,
-        // 这里调用getApplicationContext()方法来获取一个全局的Context参数并传入
-        mLocationClient = new LocationClient(getApplicationContext());
-        // 之后调用LocationClient的registerLocationListener()方法来注册一个定位监听器
-        // 当获取到位置信息的时候,就会回调这个定位监听器
-        mLocationClient.registerLocationListener(new MyLocationListener());
         positionText = (TextView) findViewById(R.id.position_text_view);
 
         // 获取新增控件ImageView的实例
@@ -238,7 +231,13 @@ public class WeatherActivity extends AppCompatActivity {
 //                Toast.makeText(WeatherActivity.this, "hello", Toast.LENGTH_SHORT).show();
             }
         });
-
+        // 首先创建一个LocationClient的实例
+        // LocationClient的构建函数接收一个Context参数,
+        // 这里调用getApplicationContext()方法来获取一个全局的Context参数并传入
+        mLocationClient = new LocationClient(getApplicationContext());
+        // 之后调用LocationClient的registerLocationListener()方法来注册一个定位监听器
+        // 当获取到位置信息的时候,就会回调这个定位监听器
+        mLocationClient.registerLocationListener(new MyLocationListener());
         // 创建一个空的List集合,然后依次判断这3个权限有没有被授权,如果没有被授权就添加到List集合中
         List<String> permissionList = new ArrayList<>();
         if (ContextCompat.checkSelfPermission(WeatherActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -257,6 +256,7 @@ public class WeatherActivity extends AppCompatActivity {
         } else {
             requestLocation();
         }
+
 
         // 尝试从本地缓存中读取数据
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -369,12 +369,13 @@ public class WeatherActivity extends AppCompatActivity {
                     localPosition.append("位置：").append(location.getAddrStr()).append("\n");
                     localPosition.append("经度：").append(location.getLongitude()).append("   ");
                     localPosition.append("纬度：").append(location.getLatitude()).append("\n");
-
                     // 获取当前地址的详细信息
                     localNation = location.getCountry();
                     localProvince = location.getProvince();
                     localCity = location.getCity();
                     localDistrict = location.getDistrict();
+
+
 
 //                    currentPosition.append("国家：").append(location.getCountry()).append("   ");
 //                    currentPosition.append("省份：").append(location.getProvince()).append("\n");
@@ -387,7 +388,6 @@ public class WeatherActivity extends AppCompatActivity {
                     } else if (location.getLocType() == BDLocation.TypeNetWorkLocation) {
                         localPosition.append("网络");
                     }
-                    positionText.setText(localPosition);
                 }
             });
         }
@@ -420,17 +420,6 @@ public class WeatherActivity extends AppCompatActivity {
                             editor.putString("weather", responseText);
                             editor.apply();
                             mWeatherId = weather.basic.weatherId;
-                            StringBuilder currentPosition = new StringBuilder();
-                            Basic basic = weather.basic;
-                            currentPosition.append("位置：").append(basic.countryId + basic.provinceId + "省" + basic.cityId + "市" );
-                            if (basic.cityId.equals(basic.cityName)) {
-                                currentPosition.append("市区").append("\n");
-                            } else {
-                                currentPosition.append(basic.cityName).append("\n");
-                            }
-                            currentPosition.append("经度：").append(basic.longitude.substring(0,10)).append("   ");
-                            currentPosition.append("纬度：").append(basic.latitude.substring(0,10));
-                            positionText.setText(currentPosition);
                             // 需要调用showWeatherInfo()方法来进行内容的显示
                             showWeatherInfo(weather);
                         } else {
@@ -487,7 +476,6 @@ public class WeatherActivity extends AppCompatActivity {
                     }
                 }
                 this.requestWeather(loCounty);
-                positionText.setText(localPosition);
                 break;
         }
         return true;
@@ -568,6 +556,17 @@ public class WeatherActivity extends AppCompatActivity {
     // TODO: 2018/12/21 Huris
     private void showWeatherInfo(Weather weather) {
         String cityName = weather.basic.cityName;
+        StringBuilder currentPosition = new StringBuilder();
+        Basic basic = weather.basic;
+        currentPosition.append("位置：").append(basic.countryId + basic.provinceId + "省" + basic.cityId + "市" );
+        if (basic.cityId.equals(basic.cityName)) {
+            currentPosition.append("市区").append("\n");
+        } else {
+            currentPosition.append(basic.cityName).append("\n");
+        }
+        currentPosition.append("经度：").append(basic.longitude.substring(0,10)).append("   ");
+        currentPosition.append("纬度：").append(basic.latitude.substring(0,10));
+        positionText.setText(currentPosition);
         getSupportActionBar().setTitle(cityName);
         StringBuilder updateTime = new StringBuilder();
         updateTime.append(weather.basic.update.updateTime.split(" ")[1]);
