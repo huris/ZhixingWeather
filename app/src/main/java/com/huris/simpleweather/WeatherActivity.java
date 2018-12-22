@@ -714,7 +714,7 @@ public class WeatherActivity extends AppCompatActivity {
             StringBuilder minTemperature = new StringBuilder("最低:");
             if (forecast.temperature.min.length() == 1) {
                 minTemperature.append("&#160").append("&#160").append("&#160").append("&#160");
-            }else if (forecast.temperature.min.length() == 2) {
+            } else if (forecast.temperature.min.length() == 2) {
                 minTemperature.append("&#160");
             }
 
@@ -724,7 +724,7 @@ public class WeatherActivity extends AppCompatActivity {
             StringBuilder maxTemperature = new StringBuilder("最高: ");
             if (forecast.temperature.max.length() == 1) {
                 maxTemperature.append("&#160").append("&#160").append("&#160").append("&#160");
-            }else if (forecast.temperature.max.length() == 2) {
+            } else if (forecast.temperature.max.length() == 2) {
                 maxTemperature.append("&#160");
             }
             maxTemperature.append("<font color='#FF4500'><big>" + forecast.temperature.max + "</big></font>");
@@ -825,9 +825,50 @@ public class WeatherActivity extends AppCompatActivity {
             }
         }
         if (weather.now != null) {
-            windSpeedText.setText(weather.now.windSpeed);
-            visibilityText.setText(weather.now.visibility);
-            precipitationText.setText(weather.now.precipitation);
+            try {
+                int windSpeedNum = Integer.parseInt(weather.now.windSpeed);
+                if (windSpeedNum > 29) {
+                    windSpeedText.setText(Html.fromHtml("<font color='#d72e29'><big>" + weather.now.windSpeed + "</big></font>"));
+                } else if (windSpeedNum > 25) {
+                    windSpeedText.setText(Html.fromHtml("<font color='#fe9900'><big>" + weather.now.windSpeed + "</big></font>"));
+                } else if (windSpeedNum > 17) {
+                    windSpeedText.setText(Html.fromHtml("<font color='#ffff00'><big>" + weather.now.windSpeed + "</big></font>"));
+                } else if (windSpeedNum > 11) {
+                    windSpeedText.setText(Html.fromHtml("<font color='#3366ff'><big>" + weather.now.windSpeed + "</big></font>"));
+                } else if (windSpeedNum >= 0) {
+                    windSpeedText.setText(Html.fromHtml("<font color='#00e400'><big>" + weather.now.windSpeed + "</big></font>"));
+                }
+            } catch (Exception e) {
+                windSpeedText.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.now.windSpeed + "</big></font>"));
+            }
+
+            try {
+                int visibilityNum = Integer.parseInt(weather.now.visibility) * 1000;
+                if (visibilityNum >= 500) {
+                    visibilityText.setText(Html.fromHtml("<font color='#00e400'><big>" + weather.now.visibility + "</big></font>"));
+                } else if (visibilityNum >= 200) {
+                    visibilityText.setText(Html.fromHtml("<font color='#feff00'><big>" + weather.now.visibility + "</big></font>"));
+                } else if (visibilityNum >= 50) {
+                    visibilityText.setText(Html.fromHtml("<font color='#ff9605'><big>" + weather.now.visibility + "</big></font>"));
+                } else if (visibilityNum >= 0) {
+                    visibilityText.setText(Html.fromHtml("<font color='#cd3230'><big>" + weather.now.visibility + "</big></font>"));
+                }
+            } catch (Exception e) {
+                visibilityText.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.now.visibility + "</big></font>"));
+            }
+
+            try {
+                double precipitationNum = Double.valueOf(weather.now.visibility);
+                if (precipitationNum > 100) {
+                    precipitationText.setText(Html.fromHtml("<font color='#d92d29'><big>" + weather.now.precipitation + "</big></font>"));
+                } else if (precipitationNum >= 50) {
+                    precipitationText.setText(Html.fromHtml("<font color='#ff9900'><big>" + weather.now.precipitation + "</big></font>"));
+                } else if (precipitationNum >= 0) {
+                    precipitationText.setText(Html.fromHtml("<font color='#00e400'><big>" + weather.now.precipitation + "</big></font>"));
+                }
+            } catch (Exception e) {
+                precipitationText.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.now.precipitation + "</big></font>"));
+            }
         }
         String comfort = "<font color='#99ffff'><big>舒适度:</big></font>&#160&#160" + weather.suggestion.comfort.info;
         String carWash = "<font color='#99ffff'><big>洗车指数:</big></font>&#160&#160" + weather.suggestion.carWash.info;
