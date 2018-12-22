@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -19,6 +20,7 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
@@ -28,6 +30,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
@@ -514,29 +517,32 @@ public class WeatherActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.local_city:
                 this.swipeRefresh.setRefreshing(true);
-                // 查找对应的省份
-                loProvince = DataSupport.where("provincename = ?", localProvince.substring(0, 2)).findFirst(Province.class);
-                // 查找对应的城市
-                cityList = DataSupport.where("provinceid = ?", String.valueOf(loProvince.getId())).find(City.class);
-                loCity = null;
-                // 在对应的城市中查找相应的县
-                for (City city : cityList) {
-                    if (city.getCityName().equals(localCity.substring(0, 2))) {
-                        loCity = city;
-                        break;
-                    }
-                }
-                countyList = DataSupport.where("cityid = ?", String.valueOf(loCity.getId())).find(County.class);
-                // 如果是市中心的区,则显示该城市的天气
-                loCounty = countyList.get(0).getWeatherId();
-                for (County county : countyList) {
-                    if (county.getCountyName().equals(localDistrict.substring(0, 2))) {
-                        // 如果是该城市的县,则显示该城市的县的天气
-                        loCounty = county.getWeatherId();
-                        break;
-                    }
-                }
-                this.requestWeather(loCounty);
+//                // 查找对应的省份
+//                loProvince = DataSupport.where("provincename = ?", localProvince.substring(0, 2)).findFirst(Province.class);
+//                // 查找对应的城市
+//                cityList = DataSupport.where("provinceid = ?", String.valueOf(loProvince.getId())).find(City.class);
+//                loCity = null;
+//                // 在对应的城市中查找相应的县
+//                for (City city : cityList) {
+//                    if (city.getCityName().equals(localCity.substring(0, 2))) {
+//                        loCity = city;
+//                        break;
+//                    }
+//                }
+//                countyList = DataSupport.where("cityid = ?", String.valueOf(loCity.getId())).find(County.class);
+//                // 如果是市中心的区,则显示该城市的天气
+//                loCounty = countyList.get(0).getWeatherId();
+//                for (County county : countyList) {
+//                    if (county.getCountyName().equals(localDistrict.substring(0, 2))) {
+//                        // 如果是该城市的县,则显示该城市的县的天气
+//                        loCounty = county.getWeatherId();
+//                        break;
+//                    }
+//                }
+//                Toast.makeText(WeatherActivity.this, localDistrict, Toast.LENGTH_SHORT).show();
+                if (MainActivity.map.get(localDistrict.substring(0,2)) != null)
+                    this.requestWeather(MainActivity.map.get(localDistrict.substring(0,2)));
+                else this.requestWeather(MainActivity.map.get(localCity.substring(0,2)));
                 break;
             case R.id.local_map:
                 Intent intent = new Intent(WeatherActivity.this, MapActivity.class);
@@ -544,7 +550,17 @@ public class WeatherActivity extends AppCompatActivity {
                 break;
             case R.id.search_city:
 
-                this.requestWeather(mainActivity.map.get("宁波"));
+                final EditText editText = new EditText(WeatherActivity.this);
+                AlertDialog.Builder inputDialog = new AlertDialog.Builder(WeatherActivity.this);
+                inputDialog.setTitle("请输入要查找的城市名").setView(editText);
+                inputDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(WeatherActivity.this,
+                                        editText.getText().toString(),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        }).show();
                 break;
         }
         return true;
