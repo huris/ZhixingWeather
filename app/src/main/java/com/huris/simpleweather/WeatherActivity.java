@@ -693,8 +693,8 @@ public class WeatherActivity extends AppCompatActivity {
                 currentPosition.append(basic.cityName).append("\n");
             }
         }
-        currentPosition.append("经度：").append(basic.longitude.substring(0, 10)).append(" ");
-        currentPosition.append("纬度：").append(basic.latitude.substring(0, 10));
+        currentPosition.append("经度:").append(basic.longitude.substring(0, 10)).append("  ");
+        currentPosition.append("纬度:").append(basic.latitude.substring(0, 10));
         mapLocalLatitude = Double.valueOf(basic.latitude.toString());
         mapLocalLongitude = Double.valueOf(basic.longitude.toString());
         positionText.setText(currentPosition);
