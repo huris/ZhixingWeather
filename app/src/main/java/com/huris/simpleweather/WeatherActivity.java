@@ -540,9 +540,9 @@ public class WeatherActivity extends AppCompatActivity {
 //                    }
 //                }
 //                Toast.makeText(WeatherActivity.this, localDistrict, Toast.LENGTH_SHORT).show();
-                if (MainActivity.map.get(localDistrict.substring(0,2)) != null)
-                    this.requestWeather(MainActivity.map.get(localDistrict.substring(0,2)));
-                else this.requestWeather(MainActivity.map.get(localCity.substring(0,2)));
+                if (MainActivity.map.get(localDistrict.substring(0, 2)) != null)
+                    this.requestWeather(MainActivity.map.get(localDistrict.substring(0, 2)));
+                else this.requestWeather(MainActivity.map.get(localCity.substring(0, 2)));
                 break;
             case R.id.local_map:
                 Intent intent = new Intent(WeatherActivity.this, MapActivity.class);
@@ -557,10 +557,10 @@ public class WeatherActivity extends AppCompatActivity {
                 builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        if(MainActivity.map.get(edit.getText().toString()) != null){
+                        if (MainActivity.map.get(edit.getText().toString()) != null) {
                             Toast.makeText(WeatherActivity.this, "即将为您显示:" + edit.getText().toString(), Toast.LENGTH_SHORT).show();
                             WeatherActivity.this.requestWeather(MainActivity.map.get(edit.getText().toString()));
-                        }else {
+                        } else {
                             Toast.makeText(WeatherActivity.this, "抱歉,您输入的城市有误!", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -652,14 +652,26 @@ public class WeatherActivity extends AppCompatActivity {
         String cityName = weather.basic.cityName;
         StringBuilder currentPosition = new StringBuilder();
         Basic basic = weather.basic;
-        currentPosition.append("位置：").append(basic.countryId + basic.provinceId + "省" + basic.cityId + "市");
         mapLocalAddress = new StringBuilder();
-        mapLocalAddress.append(basic.countryId + basic.provinceId + "省" + basic.cityId + "市");
-        if (basic.cityId.equals(basic.cityName)) {
-            currentPosition.append("市区").append("\n");
-            mapLocalAddress.append("市区");
+        if (basic.provinceId.equals("北京") || basic.provinceId.equals("上海") || basic.provinceId.equals("天津")
+                || basic.provinceId.equals("重庆") || basic.provinceId.equals("香港")
+                || basic.provinceId.equals("澳门")) {
+            currentPosition.append("位置：").append(basic.countryId + basic.provinceId);
+            mapLocalAddress.append(basic.countryId + basic.provinceId);
+            if (!basic.provinceId.equals(basic.cityName)) {
+                currentPosition.append(basic.cityName + "区");
+                mapLocalAddress.append(basic.cityName + "区");
+            }
+            currentPosition.append('\n');
         } else {
-            currentPosition.append(basic.cityName).append("\n");
+            currentPosition.append("位置：").append(basic.countryId + basic.provinceId + "省" + basic.cityId + "市");
+            mapLocalAddress.append(basic.countryId + basic.provinceId + "省" + basic.cityId + "市");
+            if (basic.cityId.equals(basic.cityName)) {
+                currentPosition.append("市区").append("\n");
+                mapLocalAddress.append("市区");
+            } else {
+                currentPosition.append(basic.cityName).append("\n");
+            }
         }
         currentPosition.append("经度：").append(basic.longitude.substring(0, 10)).append("   ");
         currentPosition.append("纬度：").append(basic.latitude.substring(0, 10));
