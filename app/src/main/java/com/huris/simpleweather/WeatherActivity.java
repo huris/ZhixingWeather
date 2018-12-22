@@ -22,6 +22,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,6 +39,7 @@ import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
+import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
@@ -72,6 +74,16 @@ import static com.huris.simpleweather.util.TimeUtil.getWeekOfDate;
 import static com.huris.simpleweather.util.TimeUtil.stringToDate;
 
 public class WeatherActivity extends AppCompatActivity {
+
+    private double mapLocalLatitude;
+
+    private double mapLocalLongitude;
+
+    private StringBuilder mapLocalAddress;
+
+    private BaiduMap baiduMap;
+
+    private MapView mapView;
 
     private int flag = 0;
 
@@ -224,15 +236,6 @@ public class WeatherActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayUseLogoEnabled(true);
         getSupportActionBar().setLogo(R.drawable.local);
 
-        // 当按钮被按下时,切换到地图视图
-        mapPosition.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(WeatherActivity.this, MapActivity.class);
-                startActivity(intent);
-//                Toast.makeText(WeatherActivity.this, "hello", Toast.LENGTH_SHORT).show();
-            }
-        });
         // 首先创建一个LocationClient的实例
         // LocationClient的构建函数接收一个Context参数,
         // 这里调用getApplicationContext()方法来获取一个全局的Context参数并传入
@@ -303,6 +306,43 @@ public class WeatherActivity extends AppCompatActivity {
             // 没有的话就调用loadBingPic()方法去请求今日的必应背景图
             loadBingPic();
         }
+        // 当按钮被按下时,切换到地图视图
+        mapPosition.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WeatherActivity.this, IdleActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+
+    private void navigateTo() {
+
+        Toast.makeText(this, "nav to " + mapLocalAddress, Toast.LENGTH_SHORT).show();
+        // LatLng的构造方法接收两个参数,第一个参数是纬度值,第二个参数是经度值
+        LatLng ll = new LatLng(mapLocalLatitude, mapLocalLongitude);
+        // 之后调用MapStatusUpdateFactory的newLatLng()方法将LatLng对象传入
+        // newLatLng对象返回的也是一个MapStatusUpdate对象
+        MapStatusUpdate update = MapStatusUpdateFactory.newLatLng(ll);
+        // 我们把这个对象传入BaiduMap的animateMApStatus方法中,就可以将地图移动到指定的经纬度上了
+        baiduMap.animateMapStatus(update);
+        // 百度地图将缩放级别的取值限定在3到19之间,其中小数点的值也是可以取的,值越大,地图显示的信息就越精细
+        // 其中MapStatusUpdateFactory的zoomTo()方法接收一个float型的参数用于设置缩放级别
+        update = MapStatusUpdateFactory.zoomTo(17f);
+        // zoomTo放回一个MapStatusUpdate对象,我们把这个对象传入BaiduMap的animateMapStatus()方法中即可完成缩放功能
+        baiduMap.animateMapStatus(update);
+        // 使用了一个isFirstLocate变量,这个变量的作用是为了防止多次调用animateMapStatus()方法
+        // 因此将地图移动到我们当前位置只需要在程序第一次定位的时候调用一次就可以了
+        // 注意,下面这段逻辑必须写到isFirstLocation这个if条件语句的外面
+        // 因为让地图移动到我们当前位置只需要在第一次定位的时候执行,但是设备在地图上显示的位置应该是实时变化的
+        MyLocationData.Builder locationBuilder = new MyLocationData.Builder();
+        // 将Location中包含的经度和纬度分别封装到了MyLocationData.Builder当中
+        locationBuilder.latitude(mapLocalLatitude);
+        locationBuilder.longitude(mapLocalLongitude);
+        MyLocationData locationData = locationBuilder.build();
+        // 最后把MyLocation设置到了BaiduMap的setMyLocationData()方法中
+        baiduMap.setMyLocationData(locationData);
     }
 
     @Override
@@ -328,6 +368,22 @@ public class WeatherActivity extends AppCompatActivity {
                 break;
             default:
         }
+    }
+
+    /**
+     * 需要重写onResume(),onPause(),onDestroy()这三个方法
+     * 这里对MapView进行管理,以保证资源能够及时地得到释放
+     */
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        mapView.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+//        mapView.onPause();
     }
 
     @Override
@@ -478,6 +534,10 @@ public class WeatherActivity extends AppCompatActivity {
                 }
                 this.requestWeather(loCounty);
                 break;
+            case R.id.local_map:
+                Intent intent = new Intent(WeatherActivity.this, MapActivity.class);
+                startActivity(intent);
+                break;
         }
         return true;
     }
@@ -554,19 +614,25 @@ public class WeatherActivity extends AppCompatActivity {
      * td
      */
 
+
     // TODO: 2018/12/21 Huris
     private void showWeatherInfo(Weather weather) {
         String cityName = weather.basic.cityName;
         StringBuilder currentPosition = new StringBuilder();
         Basic basic = weather.basic;
         currentPosition.append("位置：").append(basic.countryId + basic.provinceId + "省" + basic.cityId + "市");
+        mapLocalAddress = new StringBuilder();
+        mapLocalAddress.append(basic.countryId + basic.provinceId + "省" + basic.cityId + "市");
         if (basic.cityId.equals(basic.cityName)) {
             currentPosition.append("市区").append("\n");
+            mapLocalAddress.append("市区");
         } else {
             currentPosition.append(basic.cityName).append("\n");
         }
         currentPosition.append("经度：").append(basic.longitude.substring(0, 10)).append("   ");
         currentPosition.append("纬度：").append(basic.latitude.substring(0, 10));
+        mapLocalLatitude = Double.valueOf(basic.latitude.toString());
+        mapLocalLongitude = Double.valueOf(basic.longitude.toString());
         positionText.setText(currentPosition);
         getSupportActionBar().setTitle(cityName);
         StringBuilder updateTime = new StringBuilder();

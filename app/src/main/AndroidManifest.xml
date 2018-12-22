@@ -52,6 +52,7 @@
         </service>
 
         <activity android:name=".MapActivity"></activity>
+        <activity android:name=".IdleActivity"></activity>
     </application>
 
 </manifest>

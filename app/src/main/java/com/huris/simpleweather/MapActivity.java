@@ -57,7 +57,7 @@ public class MapActivity extends AppCompatActivity {
         // 有了BaiduMap之后我们就能进行各种各样的操作,比如设置地图的缩放级别以及将地图移动到某一个经纬度上
         baiduMap = mapView.getMap();
         baiduMap.setMyLocationEnabled(true);
-        positionText = (TextView) findViewById(R.id.position_text_view);
+//        positionText = (TextView) findViewById(R.id.position_text_view);
         List<String> permissionList = new ArrayList<>();
         if (ContextCompat.checkSelfPermission(MapActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             permissionList.add(Manifest.permission.ACCESS_FINE_LOCATION);
