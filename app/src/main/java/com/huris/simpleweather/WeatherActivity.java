@@ -62,7 +62,9 @@ import org.litepal.crud.DataSupport;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -74,6 +76,8 @@ import static com.huris.simpleweather.util.TimeUtil.getWeekOfDate;
 import static com.huris.simpleweather.util.TimeUtil.stringToDate;
 
 public class WeatherActivity extends AppCompatActivity {
+
+    MainActivity mainActivity = new MainActivity();
 
     private double mapLocalLatitude;
 
@@ -537,6 +541,10 @@ public class WeatherActivity extends AppCompatActivity {
             case R.id.local_map:
                 Intent intent = new Intent(WeatherActivity.this, MapActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.search_city:
+
+                this.requestWeather(mainActivity.map.get("宁波"));
                 break;
         }
         return true;

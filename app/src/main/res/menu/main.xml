@@ -13,4 +13,8 @@
         android:id="@+id/local_map"
         android:title="当前地图位置" />
 
+    <item
+        android:id="@+id/search_city"
+        android:title="查找城市" />
+
 </menu>
