@@ -11,10 +11,13 @@
 
     <item
         android:id="@+id/local_map"
-        android:title="当前地图位置" />
+        android:title="地图定位" />
 
     <item
         android:id="@+id/search_city"
         android:title="查找城市" />
+
+    <item
+        android:title="左侧界面右滑有彩蛋哦!" />
 
 </menu>

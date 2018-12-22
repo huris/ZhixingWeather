@@ -549,18 +549,26 @@ public class WeatherActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.search_city:
-
-                final EditText editText = new EditText(WeatherActivity.this);
-                AlertDialog.Builder inputDialog = new AlertDialog.Builder(WeatherActivity.this);
-                inputDialog.setTitle("请输入要查找的城市名").setView(editText);
-                inputDialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(WeatherActivity.this,
-                                        editText.getText().toString(),
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }).show();
+                AlertDialog.Builder builder = new AlertDialog.Builder(WeatherActivity.this);
+                builder.setTitle("请输入要查找的城市名");    //设置对话框标题
+//                builder.setIcon(android.R.drawable.btn_star);   //设置对话框标题前的图标
+                final EditText edit = new EditText(WeatherActivity.this);
+                builder.setView(edit);
+                builder.setPositiveButton("确认", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(MainActivity.map.get(edit.getText().toString()) != null){
+                            Toast.makeText(WeatherActivity.this, "即将为您显示:" + edit.getText().toString(), Toast.LENGTH_SHORT).show();
+                            WeatherActivity.this.requestWeather(MainActivity.map.get(edit.getText().toString()));
+                        }else {
+                            Toast.makeText(WeatherActivity.this, "抱歉,您输入的城市有误!", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                builder.setCancelable(true);    //设置按钮是否可以按返回键取消,false则不可以取消
+                AlertDialog dialog = builder.create();
+                dialog.setCanceledOnTouchOutside(true); //设置弹出框失去焦点是否隐藏,即点击屏蔽其它地方是否隐藏
+                dialog.show();
                 break;
         }
         return true;
