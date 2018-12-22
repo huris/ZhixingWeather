@@ -7,15 +7,18 @@
 
     <item
         android:id="@+id/local_city"
-        android:title="自动定位" />
+        android:title="自动定位"
+        android:icon="@drawable/ic_menu_local"/>
 
     <item
         android:id="@+id/local_map"
-        android:title="地图定位" />
+        android:title="地图定位"
+        android:icon="@drawable/ic_menu_map"/>
 
     <item
         android:id="@+id/search_city"
-        android:title="查找城市" />
+        android:title="查找城市"
+        android:icon="@drawable/ic_menu_search"/>
 
     <item
         android:title="左侧界面右滑有彩蛋哦!" />

@@ -1,6 +1,7 @@
 package com.huris.simpleweather;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -22,6 +23,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.menu.MenuBuilder;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.view.KeyEvent;
@@ -64,6 +66,7 @@ import org.litepal.crud.DataSupport;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -601,6 +604,23 @@ public class WeatherActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("RestrictedApi")
+    @Override
+    protected boolean onPrepareOptionsPanel(View view, Menu menu) {
+        if (menu != null) {
+            if (menu.getClass() == MenuBuilder.class) {
+                try {
+                    Method m = menu.getClass().getDeclaredMethod("setOptionalIconsVisible", Boolean.TYPE);
+                    m.setAccessible(true);
+                    m.invoke(menu, true);
+                } catch (Exception e) {
+
+                }
+            }
+        }
+        return super.onPrepareOptionsPanel(view, menu);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
@@ -673,7 +693,7 @@ public class WeatherActivity extends AppCompatActivity {
                 currentPosition.append(basic.cityName).append("\n");
             }
         }
-        currentPosition.append("经度：").append(basic.longitude.substring(0, 10)).append("   ");
+        currentPosition.append("经度：").append(basic.longitude.substring(0, 10)).append(" ");
         currentPosition.append("纬度：").append(basic.latitude.substring(0, 10));
         mapLocalLatitude = Double.valueOf(basic.latitude.toString());
         mapLocalLongitude = Double.valueOf(basic.longitude.toString());
