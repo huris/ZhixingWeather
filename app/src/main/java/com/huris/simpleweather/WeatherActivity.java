@@ -812,6 +812,8 @@ public class WeatherActivity extends AppCompatActivity {
                     aqiText.setText(Html.fromHtml("<font color='#ff7e00'><big>" + weather.aqi.city.aqi + "</big></font>"));
                 } else if (aqiNum > 50) {
                     aqiText.setText(Html.fromHtml("<font color='#ffff00'><big>" + weather.aqi.city.aqi + "</big></font>"));
+                }else if (aqiNum >= 0) {
+                    aqiText.setText(Html.fromHtml("<font color='#00e400'><big>" + weather.aqi.city.aqi + "</big></font>"));
                 }
             } catch (Exception e) {
                 aqiText.setText(Html.fromHtml("<font color='#ff0000'><big>" + weather.aqi.city.aqi + "</big></font>"));
@@ -862,6 +864,8 @@ public class WeatherActivity extends AppCompatActivity {
                         qualityText.setText(Html.fromHtml("<font color='#ff7e00'><big>" + tmp + "</big></font>"));
                     } else if (aqiNum > 50) {
                         qualityText.setText(Html.fromHtml("<font color='#ffff00'><big>" + tmp + "</big></font>"));
+                    } else if (aqiNum >= 0) {
+                        qualityText.setText(Html.fromHtml("<font color='#00e400'><big>" + tmp + "</big></font>"));
                     } else {
                         qualityText.setText(Html.fromHtml("<font color='#00e400'><big>" + tmp + "</big></font>"));
                     }
@@ -880,7 +884,10 @@ public class WeatherActivity extends AppCompatActivity {
                         qualityText.setText(Html.fromHtml("<font color='#ff7e00'><big>" + weather.aqi.city.qlty + "</big></font>"));
                     } else if (aqiNum > 50) {
                         qualityText.setText(Html.fromHtml("<font color='#ffff00'><big>" + weather.aqi.city.qlty + "</big></font>"));
-                    } else {
+                    }else if (aqiNum >= 0) {
+                        qualityText.setText(Html.fromHtml("<font color='#00e400'><big>" + weather.aqi.city.qlty  + "</big></font>"));
+                    }
+                    else {
                         qualityText.setText(Html.fromHtml("<font color='#00e400'><big>" + weather.aqi.city.qlty + "</big></font>"));
                     }
                 }
