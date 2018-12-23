@@ -1,3 +1,3 @@
-# simpleweather
+# Zhixingweather
 这是我的第一个android大型项目《简单天气》，我希望我做的这个天气软件简简单单，没有广告，预报准确，做好它自己的本职工作就可以了。
 
