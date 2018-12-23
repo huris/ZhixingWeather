@@ -936,7 +936,7 @@ public class WeatherActivity extends AppCompatActivity {
         }
         String comfort = "<font color='#99ffff'><big>舒适度:</big></font>&#160&#160" + weather.suggestion.comfort.info;
         String carWash = "<font color='#99ffff'><big>洗车指数:</big></font>&#160&#160" + weather.suggestion.carWash.info;
-        String sport = "<font color='#99ffff'><big>运行建议:</big></font>&#160&#160" + weather.suggestion.sport.info;
+        String sport = "<font color='#99ffff'><big>运动建议:</big></font>&#160&#160" + weather.suggestion.sport.info;
         comfortText.setText(Html.fromHtml(comfort));
         carWashText.setText(Html.fromHtml(carWash));
         sportText.setText(Html.fromHtml(sport));
