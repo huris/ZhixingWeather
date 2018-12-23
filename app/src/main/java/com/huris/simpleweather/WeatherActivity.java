@@ -562,6 +562,7 @@ public class WeatherActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         if (MainActivity.map.get(edit.getText().toString()) != null) {
                             Toast.makeText(WeatherActivity.this, "即将为您显示:" + edit.getText().toString(), Toast.LENGTH_SHORT).show();
+//                            WeatherActivity.this.requestWeather(MainActivity.map.get(edit.getText().toString()));
                             WeatherActivity.this.requestWeather(MainActivity.map.get(edit.getText().toString()));
                         } else {
                             Toast.makeText(WeatherActivity.this, "抱歉,您输入的城市有误!", Toast.LENGTH_SHORT).show();
