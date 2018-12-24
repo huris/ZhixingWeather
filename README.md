@@ -13,15 +13,15 @@
 
 应用安装完成后，点击应用图标，，即可进入主页面使用app，进入应用后，首先选择要查看天气的城市：依次选择省、市、县，在选择市和县的时候，都可以点击左上角的返回按钮返回上级选择列表，如图2-1，图2-2和图2-3所示。
 
-![img](clip_image002.png)
+![img](./img/clip_image002.png)
 
 ​                 							  图 2-1 选择省份和直辖市
 
-![img](clip_image004.png)
+![img](./img/clip_image004.png)
 
 ​									      	图2-2 选择城市
 
-![img](clip_image006.png)
+![img](./img/clip_image006.png)
 
 ​									    图2-3 选择县或者区域
 
@@ -29,11 +29,11 @@
 
 选择完成后，用户还需要允许应用权限，权限总共三项，一项一项允许后才可以进入主页面，否则系统会自动退出，如图2-4所示。
 
-![img](clip_image008.png)
+![img](./img/clip_image008.png)
 
-![img](clip_image010.png)
+![img](./img/clip_image010.png)
 
-![img](clip_image012.png)
+![img](./img/clip_image012.png)
 
 ​     									图2-4 三项必须允许的权限
 
@@ -43,27 +43,27 @@
 
  
 
-![img](clip_image013.png)
+![img](./img/clip_image013.png)
 
 ​					图2-5 城市定位模块。点击右侧按钮可以查看地图上的城市定位点
 
-![img](clip_image014.jpg)
+![img](./img/clip_image014.jpg)
 
 ​									图2-6 点击后展示城市定位点
 
-![img](clip_image015.png)
+![img](./img/clip_image015.png)
 
 ​			图2-7 空气质量模块，其颜色符合官方不同级别空气质量呈现的颜色，为用户提供视觉享受
 
-![img](clip_image016.png)
+![img](./img/clip_image016.png)
 
 ​						图2-8 实况天气模块，颜色符合官方预警颜色，为用户即时预警
 
-![img](clip_image017.png)
+![img](./img/clip_image017.png)
 
 ​						图2-9 未来三天天气预报，知行天气app最基本最主要的部分
 
-![img](clip_image018.jpg)
+![img](./img/clip_image018.jpg)
 
 ​							图2-10 生活建议模块，为用户提供贴心生活建议
 
@@ -71,35 +71,35 @@
 
 点击右上角的菜单按钮，会出现如下菜单，分别对应的功能为自动定位功能，地图定位功能和查询城市，如图2-11所示。
 
-![img](clip_image020.png)
+![img](./img/clip_image020.png)
 
 ​										图2-11 菜单显示
 
 点击自动定位，系统会给用户切换提示，并自动为用户切换显示用户所在城市的天气状况，如图2-12所示。
 
-![img](clip_image021.jpg)
+![img](./img/clip_image021.jpg)
 
 ​									图2-12 自动定位功能
 
 点击地图定位，系统会调用百度地图(**用户无需下载百度地图**)为用户显示用户当前所在地区的地图信息与用户的具体位置，如图2-13所示。
 
-![img](clip_image022.jpg)
+![img](./img/clip_image022.jpg)
 
 ​									图2-13 地图定位功能
 
 点击查找城市，系统会弹出对话框邀请用户输入用户要查找的城市（图2-14），输入完毕，点击确认之后，若用户输入的城市有误（图2-15），系统会为用户提示，用户可以再次使用查找功能；若用户输入城市无误，则系统自动为用户切换到用户所查找的城市的天气（图2-16）。
 
-![img](clip_image024.png)
+![img](./img/clip_image024.png)
 
 ​										图2-14 查找城市
 
-![img](clip_image025.png)
+![img](./img/clip_image025.png)
 
 ​										图2-15 查找有误
 
  
 
-![img](clip_image027.png)
+![img](./img/clip_image027.png)
 
 ​										图2-16 查找结果
 
@@ -107,15 +107,15 @@
 
 在本软件中，用户可以在天气显示界面中右滑进入选择城市的界面，该界面和之前一开始进来的界面功能相似，用户可以直接在这里选择目的城市，如图2-17，图2-18，图2-19所示。
 
-![img](clip_image028.jpg)
+![img](./img/clip_image028.jpg)
 
 ​									 图2-17 选择目的省份
 
-![img](clip_image029.jpg)
+![img](./img/clip_image029.jpg)
 
 ​									图2-18 选择目的城市 
 
-![img](clip_image001.jpg)
+![img](./img/clip_image001.jpg)
 
 ​										图2-19 选择目的县区
 
